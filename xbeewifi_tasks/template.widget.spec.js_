@@ -1,0 +1,27 @@
+'use strict';
+
+describe('Directive: <%= directive %>', function() {
+    beforeEach(module('XBeeWiFiApp'));
+
+    var scope, element;
+
+    beforeEach(inject(function ($httpBackend) {
+        $httpBackend.whenGET("/api/devices/AAA/data").respond({items: []});
+        $httpBackend.expectGET("/api/devices/AAA/data");
+    }));
+
+    beforeEach(inject(function($rootScope, $compile) {
+        var outerscope = $rootScope.$new();
+        element = angular.element('<div <%= _.dasherize(directive) %>="widget" />');
+        outerscope.widget = {device: "AAA", id: 1, type: "<%= type %>", options: {}};
+        $compile(element)(outerscope);
+
+        // Get the isolate scope created by the widget.
+        scope = outerscope.$$childHead;
+    }));
+
+    it('should have the correct widget in the scope', function() {
+        expect(scope.widget).toBeDefined();
+        expect(scope.widget.type).toBe("<%= type %>");
+    });
+});

@@ -1,0 +1,11 @@
+<div class="form-group" ng-class="{'has-error': has_error}">
+    <label class="col-lg-3 control-label" for="type">
+        Widget Type<span class="text-danger" ng-if="!is_disabled">*</span>
+    </label>
+    <div class="col-lg-6">
+        <p class="form-control-static" ng-if="is_disabled">{{selected_type.description}}</p>
+        <select ng-show="!is_disabled" class="form-control" name="type"
+            id="type" ng-model="selected_type"
+            ng-options="v.description for (k,v) in select_values"></select>
+    </div>
+</div>

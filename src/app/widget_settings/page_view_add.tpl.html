@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1>Create a new Widget</h1>
+    </div>
+</div>
+<hr />
+
+<div settings-form>
+    <div class="alert alert-danger" ng-if="settings_items_invalid()">
+        <ul>
+            <li ng-repeat="item in settings_items" ng-show="!item.valid">
+                <strong>{{item.opt.label}}:</strong> {{item.message}}
+            </li>
+        </ul>
+    </div>
+
+    <form class="form-horizontal" name="form">
+        <div widget-type-settings-item widget="widget" ng-model="selected_type"></div>
+
+        <div settings-item opt="base_options_map.label" form="form" widget="widget"></div>
+
+        <div device-picker-settings-item widget="widget" form="form"
+            ng-model="widget.device"></div>
+
+        <div ng-show="selected_type">
+            <div ng-if="defn.has_input" settings-item opt="io_options_map.gets" form="form"
+                widget="widget"></div>
+
+            <div ng-if="defn.sends_output" settings-item opt="io_options_map.sets"
+                form="form" widget="widget"></div>
+
+            <div ng-if="defn.input_xform" settings-item
+                opt="io_options_map.transform" form="form"
+                widget="widget"></div>
+
+            <div settings-item ng-repeat="opt in optionFields"
+                opt="opt" form="form" widget="widget" base="false"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-3 text-right">
+                <strong class="text-danger">*</strong>
+                Required field
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-6">
+                <button class="btn btn-devicecloud"
+                    ng-click="save()"
+                    ng-disabled="save_disabled || saving">
+                    <i class="icon-spin icon-spinner" ng-if="saving"></i>
+                    Save
+                </button>
+                <button class="btn btn-devicecloud"
+                    ng-disabled="saving"
+                    ng-click="cancel()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+@import '../../../../vendor/bootstrap/less/mixins.less';
+@import '../../../less/variables.less';
+
+.the-progress-bar {
+    position: relative;
+}
+
+.the-progress-label {
+    position: absolute;
+    top: .5em;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+    color: black;
+}
+.ui-progressbar .ui-progressbar-value {
+    height: 2em;
+    #gradient > .vertical-three-colors(@start-color: @gradientStartColor;
+    @mid-color: @gradientMidColor; @end-color: @gradientStartColor);
+}
+
+p.bar-graph-units {
+    width: 100%;
+    text-align: center;
+    font-color: #b3b3b3;
+    font-size: 12px;
+    padding-top: 4px
+}

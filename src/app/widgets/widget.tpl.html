@@ -1,0 +1,35 @@
+<div class="widget-holder">
+    <div class="widget-header">
+        {{widget.label}}
+
+        <div class="pull-right" showonhovergrandparent>
+            <a ui-sref="widget_settings({widget_id: widget.id})" title="Widget Settings">
+                <i class="icon-cog icon-large"></i>
+            </a>
+            &nbsp;
+            <a ui-sref="view_code({widget_id: widget.id})" title="View Code">
+                <i class="icon-code icon-large"></i>
+            </a>
+            &nbsp;
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="widget-inner-wrapper">
+        <div class="widgetwrap" state="widgetState"></div>
+
+        <div class="widget-progress-overlay" ng-if="!deviceConnected || widgetState">
+            <p ng-if="!deviceConnected">Device Disconnected</p>
+            <p ng-if="deviceConnected" ng-switch="widgetState">
+                <span ng-switch-when="1">
+                    <i class="icon-spin icon-spinner icon-2x"
+                        style="margin-top: 10px"
+                        title="Sending data..."></i>
+                </span>
+                <span ng-switch-when="2">Waiting for device response...</span>
+                <span ng-switch-default="">Unknown widget state {{widgetState}}</span>
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+div.widget.widget-container-error {
+    background-color: #ADADAD!important;
+}
+
+.widget-error button.show-dialog {
+    position: absolute;
+    top: 15px;
+    left: 60px;
+}

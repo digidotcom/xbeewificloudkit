@@ -1,0 +1,50 @@
+<div class="form-group" ng-class="{'has-error': has_error}">
+    <label for="{{opt.key}}" class="col-lg-3 control-label">
+        {{ opt.label }}<span ng-if="opt.required" class="text-danger">*</span>
+    </label>
+
+    <div ng-class="{'col-lg-6': _wideItem, 'col-lg-2': !_wideItem}"
+        ng-if="is_select" ng-form="innerForm">
+        <select ng-if="group_options" name="opt" ng-model="widget[opt.key]"
+            id="{{opt.key}}" class="form-control"
+            ng-options="o.value as o.label group by o.group for o in select_values"></select>
+        <select ng-if="!group_options" name="opt" ng-model="widget[opt.key]"
+            id="{{opt.key}}" class="form-control"
+            ng-options="o.value as o.label for o in select_values"></select>
+    </div>
+    <button ng-if="has_hw_config" ng-disabled="!widget.device" class="btn btn-default" ng-controller="PinConfigCtrl" ng-click="checkPinConfig(opt)">Check Device Configuration</button>
+
+    <!-- Show regular input field if needed -->
+    <div ng-class="{'col-lg-6': _wideItem, 'col-lg-2': !_wideItem}"
+        ng-if="!is_select" ng-switch="opt.type" ng-form="innerForm">
+        <input class="form-control" type="number" ng-switch-when="number"
+        ng-model="widget[opt.key]" name="opt" ng-required="{{opt.required}}"/>
+        <input class="form-control" type="text" ng-switch-when="string"
+        ng-model="widget[opt.key]" name="opt" id="{{opt.key}}"
+        ng-required="{{opt.required}}"/>
+        <div class="checkbox" ng-switch-when="boolean">
+            <label>
+                <input type="checkbox" ng-model="widget[opt.key]" name="opt"
+                id="{{opt.key}}" />
+            </label>
+        </div>
+        <input class="form-control" data-option-type="{{opt.key}}"
+        ng-model="widget[opt.key]"
+        ng-switch-default />
+    </div>
+
+    <!-- Show indicator of whether the color is valid -->
+    <div ng-if="opt.format == 'color'" class="col-lg-1 informational-text"
+        ng-switch="valid_color()">
+        <div class="widget-setting-color-shower" ng-switch-when="true"
+            ng-style="{'background-color': widget[opt.key] || opt.default}"></div>
+        <span ng-switch-default class="text-danger widget-setting-color-shower">
+            <i class="icon-ban-circle icon-2x"></i>
+        </span>
+    </div>
+
+    <!-- Show "value will be default..." -->
+    <div ng-if="will_use_default" class="col-lg-3 text-muted informational-text">
+        (Default: {{opt.default}})
+    </div>
+</div>

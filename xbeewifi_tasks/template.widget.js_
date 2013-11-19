@@ -1,0 +1,77 @@
+'use strict';
+
+angular.module('XBeeWiFiApp')
+    .directive('<%= directive %>', function (widgetRegistry, utils, $log) {
+        // called after DOM element is compiled
+        var linker = function postLink(scope, element) {
+            scope.$element = element;
+            scope.value = null;
+            var type = '<%= type %>';
+            var spec = widgetRegistry.get(type);
+
+            // See http://lodash.com/docs#bind
+            // (dataUpdate simply calls scope.updateHandler)
+            var dataUpdate = _.bind(scope.updateHandler, scope);
+            utils.linkWidget(type, scope, element, spec, dataUpdate);
+            // Any more fancy footwork can be done here.
+
+            // Watch scope values for changes, to trigger widget updates.
+            scope.$watch('value', function (newValue, oldValue) {
+                // Execute callbacks associated with the data changing
+                // (e.g. animation, color change, etc.)
+            });
+        };
+
+        // AngularJS directive setup
+        return {
+            templateUrl: "<%= templatePath %>",
+            restrict: 'AE',
+            link: linker,
+            controller: 'simpleDataHolder',
+            scope: { widget: "=<%= directive %>" }
+        };
+    })
+    // This function, referred to in AngularJS as a "run block", is called by
+    // AngularJS after the injector is created and is used to bootstrap the
+    // application. The XBee Wi-Fi Cloud Kit makes use of the run block
+    // to add widget definitions to the widget registry at start-up.
+    .run(function(widgetRegistry) {
+        // Adding the widget to the widget registry
+        var widget_type_key = '<%= type %>';
+        var widget_description = '<%= description %>';
+        var widget_spec = {
+            // Whether or not the widget is built-in or user-created
+            // (i.e., whether the code is in /src/app or /src/common)
+            builtin: <%= sys %>,
+            // widget size: X,Y (columns, rows)
+            size: [2, 2],
+            // description appearing in 'Widget Type' list when adding new
+            // widgets
+            description: widget_description,
+            directive: "<%= _.dasherize(directive) %>",
+            // camel-case version of directive
+            directive_c: "<%= directive %>",
+
+            // properties pertaining to widget settings
+            /*
+            has_input: does the widget's data get updated from Device Cloud?
+            sends_output: does the widget send data to the device?
+            input_xform: can the user specify a custom transformation to apply
+                            to incoming data?
+            options: list of objects defining the settings associated with this
+                        widget type
+                - options generally follow the Revalidator API
+                    (http://github.com/flatiron/revalidator)
+            */
+            has_input: false,
+            sends_output: false,
+            input_xform: false,
+            options: [
+                {key: "example", label: "Example Setting", type: "string",
+                 required: false, "default": ""}
+            ]
+        };
+
+        // DO NOT CHANGE ANY CODE BELOW HERE.
+        widgetRegistry.put(widget_type_key, widget_spec);
+    });

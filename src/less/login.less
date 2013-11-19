@@ -1,0 +1,138 @@
+@title-size: 52px;
+@title-weight: normal;
+@title-color: #1b1b1b;
+@title-span-bg: #ff6319;
+@title-span-color: #fff;
+@title-span-weight: bold;
+@title-span-padding: 0.1em;
+
+@form-height: 350px;
+@input-width: 250px;
+
+@import '../../vendor/bootstrap/less/mixins.less';
+
+.login-page {
+
+    .navbar {
+        min-width: @holder-width;
+        width: 100%;
+
+        .container {
+            min-width: @holder-width!important;
+            width: 800px!important;
+        }
+    }
+
+    #footer_separator {
+        min-width: @holder-width;
+    }
+
+    .container {
+        padding: 0;
+        font-size: @font-size;
+        
+        a {
+            color: @etherios-blue;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .alert {
+            margin-top: 15px;
+        }
+    }
+
+    .column-base {
+        height: @form-height;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: @title-size;
+        font-weight: @title-weight;
+        color: @title-color;
+        line-height: 1.25em;
+        margin-bottom: 15px;
+
+        img {
+            vertical-align: top;
+            padding-top: 5px;
+        }
+    }
+
+    .another-cloud {
+        padding-top: 20px;
+    }
+
+    .column-left {
+        .column-base;
+
+        width: 400px;
+        float: left;
+
+        .form-wrapper {
+            margin-top: 5px;
+
+            & > .form-group {
+                margin-bottom: 15px;
+
+                label {
+                    font-weight: bold;
+                    font-size: 14px;
+                    cursor: default;
+                }
+
+                input[type=text], input[type=password] {
+                    padding: 3px 8px;
+                    width: @input-width;
+                    margin: 0;
+                }
+
+                &.checkbox > label {
+                    display: inline-block;
+                }
+            }
+
+            .login-button {
+                border-radius: 3px;
+                cursor: pointer;
+                border: 0;
+                padding: 7px 20px;
+                font-size: 17px;
+            }
+
+            .forgot-link {
+                margin-left: 10px;
+                font-size: 12px;
+            }
+        }
+
+        .no-account {
+            margin-top: 20px;
+
+            a {
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .column-right {
+        .column-base;
+
+        width: 399px;
+        border-left: 1px solid #d6d6d6;
+        float: right;
+
+        .content {
+            margin-left: 30px;
+            display: table;
+
+            .xbee-wifi-module-image {
+                padding-top: 30px;
+            }
+        }
+    }
+}

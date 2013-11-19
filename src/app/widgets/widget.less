@@ -1,0 +1,87 @@
+@import '../../../vendor/bootstrap/less/mixins.less';
+
+@gridBackgroundColor: #BBB;
+@widgetBackgroundColor: #eaf2f7;
+@previewHolderBackgroundColor: #E5E5E5;
+@widgetIconColor: #666;
+
+.gridster {
+    /*
+     *background-color: @gridBackgroundColor;
+     *border: 3px solid @gridBackgroundColor;
+     */
+
+    .widgetProperties {
+        border-radius: 10px;
+    }
+
+    & > div.widget {
+        .widgetProperties;
+        background-color: @widgetBackgroundColor;
+        cursor: default;
+        .box-shadow(0 3px 10px 3px #AAA);
+    }
+
+    .preview-holder {
+        .widgetProperties;
+        list-style: none;
+        opacity: 1!important;
+        background-color: @previewHolderBackgroundColor!important;
+    }
+
+    .widget-holder {
+        width: 100%;
+        height: 100%;
+
+        .widget-header {
+            display: block;
+            padding: 5px;
+            /*margin: 0 5px 10px;*/
+            margin: 0 5px 0;
+            /*border-bottom: 1px solid #CCC;*/
+            font-weight: bold;
+
+            cursor: move;
+
+            a {
+                color: @widgetIconColor;
+                text-decoration: none!important;
+                cursor: pointer;
+            }
+        }
+
+        hr {
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #fff;
+            margin: 0 10px 0;
+        }
+
+
+        .widget-inner-wrapper {
+            position: relative;
+
+            .widgetwrap {
+                padding: 10px;
+            }
+
+            .widget-progress-overlay {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: #ddd;
+                .opacity(0.7);
+                z-index: 999;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+
+                p {
+                    text-align: center;
+                    font-size: 1.8em;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

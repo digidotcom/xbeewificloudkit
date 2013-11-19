@@ -1,0 +1,59 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title><%= app_name %></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- font awesome from BootstrapCDN -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+        <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+        <link rel="stylesheet" type="text/css" href="/static/<%= file %>" /><% }); %>
+
+        <!--[if IE 7>
+        <link rel="stylesheet" href="/static/assets/font-awesome-ie7.min.css />
+        <![endif]-->
+  </head>
+  <body ng-app="XBeeWiFiApp" id="ng-app"
+  ng-class="{'login-page': $state.is('login') || $state.is('login_other')}">
+  <div class="content-holder">
+    <div class="navbar">
+        <div class="container">
+            <span class="navbar-brand brand-digi">
+                <%= navbar_brand_text %>
+            </span>
+            <ul class="nav navbar-nav navbar-right" ui-view="navbar">
+            </ul>
+            <div class="navbar-right">
+                <img src="/static/assets/Logo_XBee_sml.png" alt="XBee Logo"/>
+            </div>
+        </div>
+    </div>
+    <!--[if lt IE 9]>
+        <% shims.forEach( function ( file ) { %>
+        <script src="/static/<%= file %>"></script><% }); %>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="container" ng-class="{'container-full': $state.is('dashboard')}" ui-view="page"></div>
+
+    <div id="footer_separator">
+        <div class="container">
+            <span ui-view="footer_buttons"></span>
+        </div>
+    </div>
+  </div> <!-- .content-holder -->
+
+<%= footer %>
+
+    <!-- compiled CSS --><% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="/static/<%= file %>"></script><% }); %>
+
+</body>
+</html>

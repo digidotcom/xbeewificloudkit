@@ -1,0 +1,17 @@
+<!--[if lt IE 8]>
+  <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+
+<!-- TODO: Decide what IE versions are bad -->
+<!--[if (IE 8)|(IE 9)]>
+    <div class="alert alert-warning">You are using an old version of Internet
+    Explorer. Your user experience may be degraded as a result. This
+    application works best on Chrome, Firefox, and IE 10.</div>
+<![endif]-->
+
+<div ng-controller="GridCtrl">
+    <div gridster class="gridster">
+        <div widget-generator widget="widget" ng-repeat="widget in widgets | sortByGridPosition"
+            id="widget_{{widget.id}}"/>
+    </div>
+</div>

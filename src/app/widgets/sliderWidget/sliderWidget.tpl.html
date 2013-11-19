@@ -1,0 +1,9 @@
+<div class="widget-slider" style="position:relative;">
+    <div ui-slider in-value="server_value" out-value="value" min="widget.low"
+        max="widget.high" step="widget.step" slide-cb="slideCb"></div>
+    <div style="position:absolute; top:16px; left:0; right:0;">
+        <p class="pull-left">{{widget.low}}</p>
+        <p class="pull-right">{{widget.high}}</p>
+        <p class="text-center">{{display_value}}</p>
+    </div>
+</div>

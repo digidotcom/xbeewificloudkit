@@ -1,0 +1,10 @@
+<div class="form-group" ng-class="{'has-error': devices.length && has_error}">
+    <label class="col-lg-3 control-label" for="device">
+        Device<span class="text-danger">*</span>
+    </label>
+    <div class="col-lg-6">
+        <select class="form-control" name="device" id="device" ng-model="selected_device"
+            ng-options="d.devConnectwareId as labelify(d) for d in devices"></select>
+    </div>
+</div>
+

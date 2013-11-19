@@ -1,0 +1,13 @@
+[
+{
+    "widgets": [
+        {"id": "widget1", "type": "line-graph", "label": "Temperature", "gets": "DIO1", "color": "#009e58"},
+        {"id": "widget2", "type": "switch", "label": "S1", "sets": "DIO2"},
+        {"id": "widget3", "type": "progress-vertical", "label": "Progress 1", "gets": "DIO3", "low": 0, "high": 1023},
+        {"id": "widget4", "type": "progress-vertical", "label": "Progress 2", "gets": "DIO3", "low": 200, "high": 800},
+        {"id": "widget5", "type": "stream-input-custom", "label": "Input!"},
+        {"id": "widget6", "type": "progress", "label": "Progress.", "gets": "DIO4"},
+        {"id": "widget7", "type": "slider", "label": "Slider 1"}
+    ]
+}
+]

@@ -1,0 +1,4 @@
+.widget-tilt > div[x="x"] {
+    position: absolute;
+    left: 27px;
+}

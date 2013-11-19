@@ -1,0 +1,23 @@
+Django==1.5.4
+Markdown==2.3.1
+coverage==3.6
+dj-database-url==0.2.2
+dj-static==0.0.5
+django-cors-headers==0.11
+django-jsonfield==0.9.10
+django-jux==1.0.2
+django-sslify==0.2
+djangorestframework==2.3.8
+gevent==0.13.8
+-e git://github.com/abourget/gevent-socketio.git@aeece7038b0052ddf6b4228857e4d7a67a6242f2#egg=gevent_socketio-dev
+gevent-websocket==0.3.6
+greenlet==0.4.1
+gunicorn==18.0
+mock==1.0.1
+newrelic==2.0.0.1
+psycopg2==2.5.1
+pycrypto==2.6
+requests==1.2.3
+static==0.4
+wsgiref==0.1.2
+xmltodict==0.7.0

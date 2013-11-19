@@ -1,0 +1,9 @@
+/* These height settings are necessary for the gauge to show up in IE8.
+ * (The gauge is rendered, it's just hidden) */
+.widget-gauge {
+    height: 165px;
+}
+.widget-gauge > div.ng-valid > div {
+    /* gauge holder div */
+    height: 165px;
+}

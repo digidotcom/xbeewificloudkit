@@ -1,0 +1,30 @@
+Highlight.js library, from https://github.com/isagalaev/highlight.js
+
+Documentation at:
+http://softwaremaniacs.org/soft/highlight/en/
+
+Build directions:
+
+1. Download the source from either of the links above
+
+2. Move the source folder to /vendor. The directory structure should look
+   exactly like like
+      vendor/
+        |
+        +-highlight.js/
+            |
+            +- src/
+            +- tools/
+            +- ....
+
+3. cd to the highlight.js/ directory
+
+4. Build the library with the following command:
+
+	$python2.7 tools/build.py -t browser coffeescript css javascript json python xml
+
+   This should put a highlight.pack.js file in the newly created build/ directory
+
+5. highlight.pack.js and github.css (in /src/styles/) are currently referenced
+   by the build.config.js file at the root of this repository. To change the
+   styling, just reference a different stylesheet.

@@ -1,0 +1,72 @@
+<div class="alert alert-danger hide" id="login_error">
+</div>
+
+<h1 class="title">
+    <!--<img src="/static/assets/Logo_XBee_lrg.png" />-->
+    <!--Wi-Fi Cloud Kit Log In-->
+    Log in
+    <span ng-if="!is_us" class="text-muted" style="font-size: 42px">({{cloud_fqdn}})</span>
+</h1>
+
+<form name="form" ng-submit="login()" login-form class="column-left" novalidate autofill-fix>
+    <div class="form-wrapper">
+        <div class="form-group" ng-class="{'has-error':form.username.$dirty && form.username.$invalid}">
+            <label for="dc_username">Username</label>
+            <input type="text" ng-model="username" class="form-control input-small"
+            name="username" data-toggle="tooltip" id="dc_username"
+            ng-disabled="logging_in" required>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':form.password.$dirty && form.password.$invalid}">
+            <label for="dc_password">Password</label>
+            <input type="password" ng-model="password" class="form-control input-small"
+            name="password" data-toggle="tooltip" id="dc_password"
+            ng-disabled="logging_in" required>
+        </div>
+
+        <div class="form-group checkbox">
+            <label for="remember_me">
+                <input type="checkbox" name="remember_me" id="remember_me"
+                ng-disabled="logging_in" ng-model="persistent_login">
+                Keep me logged in
+            </label>
+        </div>
+
+        <div>
+            <button type="submit" value="Log in" class="btn btn-devicecloud login-button"
+             ng-disabled="logging_in">
+                <i class="icon-spinner icon-spin icon-large" ng-if="logging_in"></i>
+                Log in
+            </button>
+
+            <a class="forgot-link"
+                ng-href="https://{{cloud_fqdn}}/forgot_password.do"
+                target="_blank">
+                Forgot your User Name or Password?
+            </a>
+        </div>
+    </div>
+
+    <div class="another-cloud">
+        Want to access a different cloud?
+        <a ng-if="is_us" ui-sref="login_other({fqdn: 'login.etherios.co.uk'})">Europe Cloud</a>
+        <a ng-if="!is_us" ui-sref="login">US Cloud</a>
+    </div>
+
+    <div style="margin-top:20px">
+        Don't have a Device Cloud Account?
+        <a href="https://myaccount.etherios.com/" target="_blank">Sign up</a>
+    </div>
+</form>
+
+
+<div class="column-right">
+    <div class="content">
+        Use your Device Cloud account to manage your XBee Wi-Fi Cloud Kit data.
+    </div>
+
+    <div class="content">
+        <img src="/static/assets/XBee_S6B.png" alt="XBee Wi-Fi module"
+                class="xbee-wifi-module-image"/>
+    </div>
+</div>

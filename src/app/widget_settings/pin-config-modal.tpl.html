@@ -1,0 +1,50 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Device IO Configuration</h3>
+        </div>
+        <div class="modal-body">
+
+            <div class="row" ng-show="state.working">
+                <div class="alert alert-info col-lg-offset-1 col-lg-10">
+                    <i class="icon-spinner icon-spin icon-large"></i> Checking device configuration...
+                </div>
+            </div>
+            <div class="row" ng-show="state.applying">
+                <div class="alert alert-info col-lg-offset-1 col-lg-10">
+                    <i class="icon-spinner icon-spin icon-large"></i> Applying new configuration to device...
+                </div>
+            </div>
+
+            <div class="row" ng-show="!state.working && !state.applying">
+                <div ng-show="!state.error" class="col-lg-offset-1 col-lg-10">
+                    <div ng-show="state.configured" class="alert alert-success">
+                        <i class="icon-ok icon-large"></i> The device is configured for this setting <strong>({{command.cmd}}: {{device_value}})</strong>
+                    </div>
+                    <div ng-show="!state.configured">
+                        <div class="alert alert-warning">
+                            <i class="icon-warning-sign icon-large"></i> The device is <strong>not</strong> configured for this setting <strong>({{command.cmd}}: {{device_value}})</strong>
+                        </div>
+
+                    </div>
+                    <form class="form" role="form" ng-show="state.needs_config">
+                      <div class="form-group">
+                        <label for="cmdSelect" class="control-label">Change Pin Configuration:</label>
+                        <select id="cmdSelect" class="form-control" ng-model="selected_value" ng-options="option.value as option.label for option in command.options"></select>
+                      </div>
+                    </form>
+                </div>
+                <div ng-show="state.error" class="col-lg-offset-1 col-lg-10">
+                    <div class="alert alert-danger">
+                        An error occured processing configuration<span ng-show="state.error_text">: <strong>{{state.error_text}}</stong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-show="state.needs_config && !state.error" ng-click="configure_device(command.cmd, selected_value, device_ic)" class="btn btn-devicecloud" ng-disabled="state.applying || selected_value == device_value">Reconfigure Device</button>
+            <button ng-click="check_config()" class="btn btn-devicecloud" ng-show="state.error">Retry</button>
+            <button class="btn btn-default" ng-click="$close()">Close</button>
+        </div>
+    </div>
+</div>

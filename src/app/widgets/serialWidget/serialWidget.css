@@ -1,0 +1,16 @@
+.widget-serial .serial-display {
+    height: 100px;
+    overflow: auto;
+}
+
+.widget-serial .serial-display p{
+    margin: 0;
+}
+
+.widget-serial .serial-in {
+    color: red;
+}
+
+.widget-serial .serial-out {
+    color: blue;
+}

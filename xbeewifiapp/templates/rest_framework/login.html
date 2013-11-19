@@ -1,0 +1,68 @@
+{% load url from future %}
+{% load rest_framework %}
+<html>
+
+    <head>
+        {% block style %}
+        {% block bootstrap_theme %}
+            <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/bootstrap.min.css" %}"/>
+            <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/bootstrap-tweaks.css" %}"/>
+        {% endblock %}
+        <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/default.css" %}"/>
+        {% endblock %}
+    </head>
+
+    <body class="container">
+
+        <div class="container-fluid" style="margin-top: 30px">
+            <div class="row-fluid">
+                <div class="well" style="width: 320px; margin-left: auto; margin-right: auto">
+                    <div class="row-fluid">
+                        <div>
+                            {% block branding %}<h3 style="margin: 0 0 20px;">XBee Wi-Fi Cloud Kit API</h3>{% endblock %}
+                        </div>
+                    </div><!-- /row fluid -->
+
+                    <div class="row-fluid">
+                        <div>
+                            <form action="{% url 'rest_framework:login' %}" class=" form-inline" method="post">
+                                {% csrf_token %}
+                                <div id="div_id_username" class="clearfix control-group">
+                                    <div class="controls">
+                                        <Label class="span4">Username:</label>
+                                        <input style="height: 25px" type="text" name="username" maxlength="100" autocapitalize="off" autocorrect="off" class="textinput textInput" id="id_username">
+                                    </div>
+                                </div>
+                                <div id="div_id_password" class="clearfix control-group">
+                                    <div class="controls">
+                                        <Label class="span4">Password:</label>
+                                        <input style="height: 25px" type="password" name="password" maxlength="100" autocapitalize="off" autocorrect="off" class="textinput textInput" id="id_password">
+                                    </div>
+                                </div>
+                                <div id="div_id_cloud_fqdn" class="clearfix control-group">
+                                    <div class="controls">
+                                        <label class="span4">Device Cloud:</label>
+                                        <select id="id_cloud_fqdn" name="cloud_fqdn" style="height: 25px">
+                                            <optgroup label="US Clouds">
+                                                <option selected>login.etherios.com</option>
+                                                <option>test.etherios.com</option>
+                                                <option>my.idigi.com</option>
+                                            </optgroup>
+                                            <optgroup label="EU Clouds">
+                                                <option>login.etherios.co.uk</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="next" value="{{ next }}" />
+                                <div class="form-actions-no-box">
+                                    <input type="submit" name="submit" value="Log in" class="btn btn-primary" id="submit-id-submit">
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- /.row-fluid -->
+                </div><!--/.well-->
+            </div><!-- /.row-fluid -->
+        </div><!-- /.container-fluid -->
+    </body>
+</html>

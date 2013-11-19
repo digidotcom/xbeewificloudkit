@@ -1,0 +1,248 @@
+/**
+ * This is the main application stylesheet. It should include or import all
+ * stylesheets used throughout the application as this is the only stylesheet in
+ * the Grunt configuration that is automatically processed.
+ */
+
+
+/**
+ * First, we include the Twitter Bootstrap LESS files
+ */
+
+@import '../../vendor/bootstrap/less/bootstrap.less';
+
+
+/**
+ * This is our main variables file. It in turn imports the `variables` file from
+ * Twitter Bootstrap. We must include it last so we can overwrite any variable
+ * definitions in our imported stylesheets.
+ */
+
+@import 'variables.less';
+
+@import 'mixins.less';
+
+
+/**
+ * Typography
+ */
+
+code, pre, .pre {
+  padding: 5px;
+  margin: 10px 0;
+  background-color: #EFEFEF;
+  border: 1px solid #DADADA;
+  border-radius: 3px;
+}
+
+code {
+  padding: 0 3px;
+}
+
+pre {
+  margin: 10px 0;
+  padding: 5px;
+}
+
+/**
+ * Now that all app-wide styles have been applied, we can load the styles for
+ * all the submodules and components we are using.
+ *
+ * TODO: In a later version of this boilerplate, I'd like to automate this.
+ */
+
+@import 'jquery.gridster.less';
+
+@import 'login.less';
+
+.full-width {
+    width: 100%;
+    min-width: @holder-width;
+}
+
+.forceWidth(@width) {
+    width: @width!important;
+    max-width: @width!important;
+    min-width: @width!important;
+}
+
+/*@thickSeparatorColor: #1a386e;*/
+@thickSeparatorColor: #2e5a9a;
+
+.navbar {
+    .selectNone;
+    .full-width;
+    line-height: @navbarHeight;
+    border-radius: 0px;
+    border: none;
+    border-bottom: 19px solid @thickSeparatorColor;
+    background-color: #fff;
+    margin-bottom: 0px;
+
+    .container {
+        border: 0;
+        border-radius: 0;
+        background-image: none!important;
+        box-shadow: none!important;
+        height: @navbarHeight;
+        line-height: @navbarHeight;
+        padding: 0!important;
+        .forceWidth(940px);
+
+        .brand-digi {
+            font-weight: bold;
+            font-size: 42px;
+            display: inline-table;
+            max-width: 50%;
+            margin-left: 20px;
+            line-height: 20px;
+            position: absolute;
+            bottom: 12px;
+        }
+
+        .pull-right {
+            /* Sometimes when the page loads, the nav links don't appear
+             * in-line with the branding, but rather BELOW where they ought
+             * to be in the navbar */
+            display: inline-table;
+        }
+
+        .nav.navbar-nav {
+            > li > a {
+                padding-top: 0px;
+                padding-bottom: 0px;
+                line-height: @navbarHeight;
+                text-align: center; /* IE8 has the text off to the left */
+
+                &:hover {
+                    text-decoration: underline;
+                    background-color: #f5f5f5;
+                }
+            }
+        }
+    }
+}
+
+@separator-height: 50px;
+#footer_separator {
+    .full-width;
+    .selectNone;
+    height: @separator-height;
+    width: 100%;
+    background-color: @thickSeparatorColor;
+    margin: 0px 0px 10px;
+
+    .container {
+        .forceWidth(940px);
+
+        span {
+            .pull-right;
+            line-height: @separator-height;
+            color: #fff;
+        }
+    }
+}
+
+.footer_copyright {
+    display: inline-table;
+    font-size: 12px;
+}
+
+.footer_copyright_left {
+    .footer_copyright;
+}
+
+.footer_copyright_right {
+    .footer_copyright;
+    .pull-right;
+
+    a {
+        color: black !important;
+    }
+}
+
+body {
+    .forceWidth(@holder-width);
+    margin: 0 auto;
+    padding-bottom: 15px; /* for copyright */
+    background-color: #fff;
+    background-image: url(/static/assets/background-gradient.png);
+    background-repeat: repeat-x;
+    font-family: museo-sans, Arial, Helvetica, sans-serif;
+}
+
+.content-holder {
+    background-color: #fff;
+}
+
+.container {
+    width: @container-width;
+    margin: 0 auto;
+    clear: both;
+    padding: 0 0 10px 0;
+}
+
+.container-full {
+    width: @holder-width;
+    padding: 0;
+}
+
+//==================================
+
+// Device Add/Configuration Page
+h1 > a.pull-right.btn-link {
+    // Align the text in the link with the h1 text.
+    margin-top: 10px;
+}
+
+.device-table .mac-cell {
+    font-size: 18px;
+}
+
+//=====================================
+// Dashboard page
+.gridster {
+    .forceWidth(940px);
+    .selectNone;
+    & > * {
+        .selectNone;
+    }
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+code.code-view-contents {
+    overflow-y: scroll;
+    max-height: 250px;
+}
+
+
+/*@import '../../vendor/bootstrap-switch/static/less/bootstrap-switch.less';*/
+
+/*
+ * Cloud Kit Bootstrap customizations
+ */
+@import 'variables-digi-bootstrap.less';
+
+@import '../app/widget_settings/style.less';
+
+
+// Custom buttons
+@btn-devicecloud-color:              #fff;
+@btn-devicecloud-bg:                 #d14c03;
+@btn-devicecloud-border:             @btn-devicecloud-bg;
+
+.btn-devicecloud {
+  .button-variant(@btn-devicecloud-color; @btn-devicecloud-bg; @btn-devicecloud-border);
+}
+
+
+/* For ui-bootstrap 0.6, remove once we're at 0.7 w/ BS3 support*/
+.modal {
+    display: block;
+}
+
+.hide {
+    display: none;
+}

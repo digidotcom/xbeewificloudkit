@@ -1,0 +1,46 @@
+@import '../../../less/variables.less';
+@import '../../../../vendor/bootstrap/less/mixins.less';
+
+.ui-progressbar-vertical {
+    width: 3em;
+    height: 250px;
+    text-align: left;
+    position: relative;
+    /* Align the vertical bar to the center of the widget */
+    margin: 0 auto;
+}
+
+.ui-progressbar-vertical .ui-progressbar-value {
+    margin: -1px;
+    width: 3em;
+    position: absolute;
+    display: block;
+    height: 0;
+    left: 0;
+    bottom: 0%;
+}
+
+.ui-widget-header-vertical {
+    /* Almost the same as .ui-widget-header defaults */
+    border: 1px solid #aaaaaa;
+    #gradient > .horizontal-three-colors(@start-color: @gradientStartColor,
+    @mid-color: @gradientMidColor, @end-color: @gradientStartColor);
+    color: #222222;
+    font-weight: bold;
+}
+
+.the-vertical-progress-bar {
+    position: relative;
+}
+
+.the-vertical-progress-label {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+    color: black;
+}
+

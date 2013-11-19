@@ -1,0 +1,16 @@
+.ui-widget-header {
+	background: #69D6FF !important;
+}
+
+.ui-slider, .ui-slider-handle {
+    cursor: pointer!important;
+}
+
+.ui-slider-handle {
+	background: #69D6FF !important;
+	border-color: #47B4DD !important;
+}
+
+.ui-slider-handle:hover {
+	box-shadow: 0px 0px 2px #555555 !important;
+}

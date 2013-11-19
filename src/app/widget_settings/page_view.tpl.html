@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="col-lg-8">
+        <h1>Widget Settings</h1>
+    </div>
+    <div class="col-lg-4">
+        <button class="btn btn-devicecloud pull-right"
+            style="margin-top: 30px" ng-click="removeWidget()"
+            ng-disabled="removing || saving">
+            <i class="icon-large icon-remove" ng-if="!removing"></i>
+            <i class="icon-spin icon-spinner" ng-if="removing"></i>
+            Remove Widget
+        </button>
+    </div>
+</div>
+<hr />
+
+<div settings-form>
+    <div class="alert alert-danger" ng-if="settings_items_invalid()">
+        <ul>
+            <li ng-repeat="item in settings_items" ng-show="!item.valid">
+                <strong>{{item.opt.label}}:</strong> {{item.message}}
+            </li>
+        </ul>
+    </div>
+
+    <!-- ng-show="selected_type" hides the form until the widget has been
+    loaded and the settings form is ready to be displayed -->
+    <form class="form-horizontal" name="form" ng-show="selected_type">
+        <div widget-type-settings-item widget="widget" ng-model="selected_type" read-only="true"></div>
+
+        <div settings-item opt="base_options_map.label" form="form" widget="widget"></div>
+
+        <div device-picker-settings-item widget="widget" form="form"
+            ng-model="widget.device"></div>
+
+        <div ng-show="selected_type">
+            <div ng-if="defn.has_input" settings-item opt="io_options_map.gets" form="form"
+                widget="widget"></div>
+
+            <div ng-if="defn.sends_output" settings-item opt="io_options_map.sets"
+                form="form" widget="widget"></div>
+
+            <div ng-if="defn.input_xform" settings-item
+                opt="io_options_map.transform" form="form"
+                widget="widget"></div>
+
+            <div settings-item ng-repeat="opt in optionFields"
+                opt="opt" form="form" widget="widget" base="false"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-3 text-right">
+                <strong class="text-danger">*</strong>
+                Required field
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <button class="btn btn-devicecloud"
+                    ng-click="save()"
+                    ng-disabled="save_disabled || saving || removing">
+                    <i class="icon-spin icon-spinner" ng-if="saving"></i>
+                    Save
+                </button>
+                <button class="btn btn-devicecloud"
+                    ng-disabled="saving || removing"
+                    ng-click="cancel()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<p ng-show="!selected_type" class="col-lg-6 col-lg-offset-3">
+    Loading widget...
+</p>

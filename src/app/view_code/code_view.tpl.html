@@ -1,0 +1,13 @@
+<div class="hide">
+    <hr />
+    <h4>{{title}}
+        <span class="text-muted">
+            (<a ng-href="{{code_url}}" class="text-muted" target="_blank">{{path}}</a>)
+        </span>
+    </h4>
+    <pre ng-class="{javascript: fileType=='js',
+                    html: fileType=='tpl.html',
+                    css: (fileType=='css' || fileType=='less')}">
+        <code widget="widget" class="code-view-contents"></code>
+    </pre>
+</div>
