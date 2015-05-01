@@ -46,7 +46,7 @@ the application's Python dependencies.
 [pip]: http://www.pip-installer.org/en/latest/installing.html
 
 Installation
-------------s
+------------
 
 Once you have checked out the source code from Git, navigate to the root
 directory of the code and run
