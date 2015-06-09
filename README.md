@@ -15,6 +15,23 @@ contributed by [Digi International][Digi].
 
 [Digi]: http://www.digi.com
 
+Support and Contributing
+------------------------
+
+Contributions to the project are very welcome. Please submit any issues you
+find to the [GitHub issue tracker][issues]. If you have a change you would like
+to have included in the application, please submit a pull request against the
+`develop` branch.
+
+Application code on the `master` branch is of release quality and has been
+code-reviewed and quality tested at the time of release. Any code added to the
+repository between official releases can be found on the `develop` branch; code
+on this branch has been code-reviewed but has not necessarily been fully
+tested - use this at your own discretion.
+
+[issues]: https://github.com/digidotcom/xbeewificloudkit/issues
+
+---
 
 Requirements
 ------------
