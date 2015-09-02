@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -58,6 +58,24 @@ angular.module('XBeeWiFiApp')
         });
         socket.on('error', function (msg, extra) {
             $log.error("Error (via socket): ", msg, extra);
+
+            var error;
+            if (extra) {
+                error = extra;
+
+                // Extract Device Cloud error, if there is one.
+                var error_regex = /<error>([\s\S]*?)<\/error>/;
+                if (extra.search(error_regex) > -1) {
+                    error = extra.match(error_regex)[1].trim();
+
+                    // Trim off beginning of error.
+                    var start = /^(POST|PUT) Monitor error. Invalid request. /;
+                    if (error.search(start) === 0) {
+                        error = error.replace(start, "");
+                    }
+                }
+            }
+            notificationService.error(error, msg, {timeOut: 10000});
         });
 
         // regex used to parse streamId property in data pushes.
@@ -90,7 +108,7 @@ angular.module('XBeeWiFiApp')
                 if (_.isNaN(parsed)) {
                     // Unable to parse timestamp as number.
                     try {
-                        var ts = JSON.stringify(timestamp);
+                        timestamp = JSON.stringify(timestamp);
                     } catch (e) {
                         // timestamp could be a recursive object...
                         $log.error("Parsing timestamp...", e);

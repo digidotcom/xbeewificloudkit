@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -56,13 +56,18 @@ angular.module('XBeeWiFiApp')
 
         $scope.sendText = function(text) {
             $scope.data_sending = true;
-            // Insert a CR before/after string to make it show on new line on both ends
-            var text_cr = String.fromCharCode(13) + text + String.fromCharCode(13)
 
-            cloudKitApi.output($scope.widget.device, $scope.widget.sets, text_cr).then(
+            if ($scope.widget.add_carriage_returns) {
+                // Insert a CR before/after string to make it add a carriage
+                // return on both ends
+                var cr = String.fromCharCode(13);
+                text = cr + text + cr;
+            }
+
+            cloudKitApi.output($scope.widget.device, $scope.widget.sets, text).then(
                 function(result){
                     // On success, show the sent text
-                    $scope.displaySerialText(text_cr, false);
+                    $scope.displaySerialText(text, false);
                     // Clear the input box for next entry
                     $scope.serialOutText = null;
                     // Reenable input
@@ -173,7 +178,10 @@ angular.module('XBeeWiFiApp')
             */
             has_input: true,
             sends_output: true,
-            options: []
+            options: [
+                {key: "add_carriage_returns", label: "Add Carriage Returns",
+                 type: "boolean", required: false, 'default': true}
+            ]
         };
 
         // DO NOT CHANGE ANY CODE BELOW HERE.

@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 angular.module('XBeeWiFiApp.setup', [
@@ -45,6 +45,8 @@ angular.module('XBeeWiFiApp.setup', [
         }, function (error) {
             $scope.load_error = error;
             $scope.loading = false;
+        })['finally'](function () {
+            $('select#inputDevice').select2();
         });
     }
     $scope.get_devices();
@@ -135,15 +137,24 @@ angular.module('XBeeWiFiApp.setup', [
         });
     }
 
+    $scope.make_label = function (device) {
+        var label = device.devMac;
+        if (device.dpDescription) {
+            label += ' (' + device.dpDescription + ')';
+        }
+        return label;
+    }
+
     $scope.dashboard_layouts = dashboardService._dashboard_layouts();
     $scope.selected_layout = $scope.dashboard_layouts[0];
     $scope.dashboard_working = false;
 
     $scope.create_dashboard = function (device, dashboard) {
+        var cwid = device ? device.devConnectwareId : undefined;
         $log.debug("Creating new dashboard for device:", device);
         $log.debug("Dashboard definition:", dashboard.definition);
         $scope.dashboard_working = true;
-        dashboardService.make_dashboard(device.devConnectwareId, dashboard.definition).then(function () {
+        dashboardService.make_dashboard(cwid, dashboard.definition).then(function () {
             $scope.dashboard_working = false;
             $state.go('dashboard');
         }, function (response) {

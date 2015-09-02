@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -12,11 +12,6 @@ angular.module('XBeeWiFiApp')
     .directive('widgetGenerator', function (widgetRegistry, $compile, $log,
                                             utils, $state, $templateCache,
                                             deviceStatus) {
-        var simplify = function (widget) {
-            var w = _.omit(widget, ["$$hashKey", "$gridPos", "$error", "$type"]);
-            return w;
-        }
-
         return {
             restrict: 'A',
             //replace: true,
@@ -41,7 +36,6 @@ angular.module('XBeeWiFiApp')
                         utils.verify_widget(scope.widget, in_reg);
                     } else {
                         // The widget isn't in the registry...
-                        var widget = JSON.stringify(simplify(widget));
                         var errmsg = "Widget type \"" + scope.widget.type +
                                      "\" not in registry.";
                         throw new Error(errmsg);
@@ -76,7 +70,7 @@ angular.module('XBeeWiFiApp')
                 scope.$watch(function(){
                     return deviceStatus.device_status_map[scope.widget.device];
                 }, function(newVal) {
-                    scope.deviceConnected = Boolean(parseInt(newVal));
+                    scope.deviceConnected = Boolean(parseInt(newVal, 10));
                 })
 
                 var calculateWrapperHeight = function () {

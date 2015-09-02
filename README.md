@@ -13,6 +13,9 @@ contributed by [Digi International][Digi].
     Heroku, and customize it to your needs, including creating new types of
     widgets and extending the application's functionality.
 
+See the [changelog](./CHANGELOG.md) for a summary of changes made in each
+release.
+
 [Digi]: http://www.digi.com
 
 Support and Contributing
@@ -36,17 +39,43 @@ tested - use this at your own discretion.
 Requirements
 ------------
 
-This application should run in Windows, Linux and Mac OS X, provided the
+### Before you continue
+
+These Requirements and Installations sections detail the instructions to set up
+your computer for complete local development of the Cloud Kit. This is only
+necessary if you wish to edit, recompile, and run the Cloud Kit application
+locally on your computer. If you do not need to run the application locally,
+Digi recommends that you use the following workflow:
+
+  * Follow the instructions under 'App setup for Heroku' below, to create a
+    Heroku application and add a Git remote for it
+  * Edit the application source code locally
+  * Use `git commit` to commit your changes
+  * Use `git push heroku master` to deploy your changes to the Heroku
+    application
+  * Continue editing, committing, and pushing as necessary
+
+This workflow will be slower than if you run the application locally on your
+machine, but it will help avoid any compatibility issues with installing all
+the required programs and dependencies on your computer.
+
+If you are using a Windows PC and wish to develop locally, skip ahead to the
+"Windows" heading under "Installation" below.
+
+
+### Required programs
+
+This application should run in Linux and Mac OS X, provided the
 necessary programs are installed.  These are:
 
   * The [Heroku Toolbelt][toolbelt]
 
-  * [Python 2.7][py27]
+  * [Python 2.7.6][py27]
 
   * [node.js][node]
 
 [toolbelt]: http://toolbelt.herokuapp.com/
-[py27]: http://www.python.org/download/releases/2.7/
+[py27]: http://www.python.org/download/releases/2.7.6/
 [node]: http://nodejs.org/
 
 Installing node.js will also install NPM, node.js's package manager. Using NPM,
@@ -63,63 +92,97 @@ the application's Python dependencies.
 [pip]: http://www.pip-installer.org/en/latest/installing.html
 
 Installation
-------------s
+------------
 
-Once you have checked out the source code from Git, navigate to the root
-directory of the code and run
+### Linux and Mac OS
 
+Once you have checked out the source code from Git, and you have completed
+installing the required programs (see "Requirements" above), navigate to the
+root directory of the code and run the following commands:
+
+    $ pip install -r requirements.txt
     $ npm install
-    $ bower install
-    $ grunt heroku:production
 
-to install all Node modules required for developing the front-end application.
+This will download and install the Python modules and libraries needed by the
+Django backend, and install all Node modules required for developing the
+front-end application.
 This installation process will also use Bower to download the necessary
-front-end dependencies, and use Grunt to build the code.
+front-end dependencies, and use Grunt to build the code (as part of the
+post-install process of `npm install`).
 
-For Windows machines only:
---------------------------
 
-Follow the directions for full setup of Python on Windows including setup of
-your PATH environment variable, ez_setup.py and get-pip.py:
+### Windows
 
-http://docs.python-guide.org/en/latest/starting/install/win/
+If you want to be able to build and run the XBee Wi-Fi Cloud Kit app from a
+Windows machine, you will need to install the following programs:
 
-Download and install gevent-0.13.8 for Python 2.7.  Use 
-gevent-0.13.8.win32-py2.7.msi from [gevent][gevent].
+  * [VirtualBox][vbox]
+  * [Vagrant][vagrant]
+  * [Git][git]
+  * [NodeJS][node]
 
-Download and install psycopg2 for Python 2.7.  Use 
-psycopg2-2.5.1.win32-py2.7-pg9.2.4-release.exe from [win-psycopg][psycopg].
+[vbox]: https://www.virtualbox.org/wiki/Downloads
+[vagrant]: http://www.vagrantup.com/downloads.html
+[git]: http://git-scm.com
+[node]: http://nodejs.org/
 
-You must have a C compiler installed so that pip can build some of the required
-packages, typically this means you need Microsoft Visual Studio Express
-for C/C++ from the [Microsoft Downloads site][microsoft].  Python 2.7 was built
-with Microsoft Visual Studio 2008, so if you do not have it, use
-2010 and run: 
+(If you have already installed Git on your PC, ensure that the `git` command is
+available from the Command Prompt. If it is not, add it to your PATH using the
+same instructions as the "Add the VirtualBox utilities to your PATH"
+instructions below; on a 32-bit PC, this should be `C:\Program Files\Git\bin`,
+and on a 64-bit PC, this should be `C:\Program Files (x86)\Git\bin`.)
 
-    C:\set VS90COMNTOOLS=%VS100COMNTOOLS%
+Once you have these programs installed, follow these steps:
 
-Finally, run
+  1. Add the VirtualBox utilities to your PATH. This is required so that
+     Vagrant can work properly.
 
-    C:\pip install -r requirements.WINDOWS.txt
+      * Open the Start Menu, right-click on 'Computer', and click 'Properties'.
+      * Click 'Advanced system settings' on the left side of the window.
+      * Click the "Environment Variables..." button.
+      * In the 'System variables' table, double-click on 'Path'.
+      * Append the installation path of VirtualBox to the 'Variable value'
+        field. By default, this will be `C:\Program Files\Oracle\VirtualBox`
+        (on both 32-bit and 64-bit PCs).
 
-to install the Python module dependencies needed for the application.  Note
-this is the step that requires the C compiler.  If you see the error
-"Unable to find vcvarsall.bat", then setup.py cannot locate your C compiler 
-environment.
+            <current value>;C:\Program Files\Oracle\VirtualBox
 
-[microsoft]: http://www.microsoft.com/en-us/download/
-[gevent]: https://pypi.python.org/pypi/gevent
-[psycopg]: http://stickpeople.com/projects/python/win-psycopg/
+  1. Check out the XBee Wi-Fi Cloud Kit source code from GitHub (if you
+      haven't already). To do so, open a Command Prompt and enter the following
+      command:
 
-For Linux and Mac:
-------------------
+          git clone https://github.com/digidotcom/xbeewificloudkit
 
-Run
-    C:\ pip install -r requirements.txt
+  1. Open a Command Prompt, and change directories to the root directory of
+      the source code.
 
-to install the Python module dependencies
-needed for the application.
+          C:\Users\username> cd xbeewificloudkit
+          C:\Users\username\xbeewificloudkit>
 
+  1. Run the command `npm install`. This will install the Node modules
+      required by the application. (This needs to be done from Windows because
+      Windows has a limit on file path lengths, and running `npm install`
+      inside of the Vagrant box (see the next step) will usually fail.)
+
+  1. Run the command `vagrant up`, to automatically provision a new
+      VirtualBox machine and set it up for Cloud Kit development. This process
+      will take several minutes.
+
+  1. The virtual machine created in the previous step should now be
+      accessible through a small screen. Log in as the user `vagrant` (with
+      the password `vagrant`), change to the `/vagrant` directory, and run
+      `foreman start`. The Cloud Kit application should now be accessible from
+      your Windows machine by opening http://localhost:5000 in a web browser.
+
+          vagrant@precise32:~$ cd /vagrant
+          vagrant@precise32:/vagrant$ foreman start
+          12:00:00 web.1  | started with pid 5678
+
+The root directory of the source code you checked out is shared with the
+Vagrant box as the `/vagrant` directory. This means that you can edit the
+source code from Windows as well as from within the Vagrant machine. When you
+are ready to re-compile the application, stop Foreman by typing Ctrl-C, run
+`grunt build`, and then run `foreman start` again.
 
 
 App setup for Heroku
@@ -128,28 +191,40 @@ App setup for Heroku
 ## Heroku setup
 
 Deploying a version of this application for your own use requires a [Heroku
-account][heroku] and the [Heroku command line toolbelt][heroku_dev].
+account][heroku] and the [Heroku command line toolbelt][heroku_dev]. (If you
+are using Windows and have followed the instructions above, the Heroku toolbelt
+is already installed on the Vagrant virtual machine.)
 
-1. Create a new Heroku app
+1. Create a new Heroku app:
 
-        $ heroku create *appname*
+        $ heroku create
 
-1. Configure the new app to use multi-buildpacks (NodeJS & python in our case)
+1.  Configure the new app to use multi-buildpacks (NodeJS & python in our case):
 
         $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
 
-1. Deploy the application code to Heroku
+1.  Add the "Heroku Postgres" addon to your app:
+
+        $ heroku addons:add heroku-postgresql
+
+1.  Deploy the application code to Heroku:
 
         $ git push heroku master
 
-1. Provision the database for the app
+1.  Provision the database for the app:
 
         $ heroku run python manage.py syncdb
 
 [heroku]: http://www.heroku.com/
 [heroku_dev]: http://toolbelt.herokuapp.com/
+[herokudash]: https://dashboard.heroku.com/apps
 
 ## Setup to run app locally:
+
+First, you will need to edit the file Procfile, comment out the third line
+(`web: gunicorn ...`) and uncomment the last line (`web: python ...`). (If you
+are using Windows and have followed the instructions above, the Procfile has
+already been edited, and you can skip the "Provision the database" step below.)
 
 1. Run the grunt build
 
@@ -190,23 +265,9 @@ Run `grunt build` to gather all the necessary files into the build/ directory
 and run unit tests. Run `grunt build-notest` to gather the files without running
 unit tests.
 
-Finally, start the mock back-end server with
-
-    $ node server.js build <heroku_app_name>
-
-and open your browser to `http://localhost:3000`. This server allows the
-front-end application to run on your local machine without running into
-cross-site scripting errors. The server simply pipes requests and responses to
-and from the RESTful API of the your Heroku instance. The command
-
-    $ PORT=9000 node server.js build <heroku_app_name>
-
- will run the local server at a different port, if this is necessary or desired.
-
-
-**Note:** You may choose to run the Django back-end server locally, rather than
-use the mock Node server to forward requests to a Heroku instance. See "Setup to
-run app locally" above for more information on how to do so.
+See "Setup to run app locally" above, and the "Running locally" section toward
+the bottom of this document, for information on how to run the Django back-end
+locally on your computer.
 
 
 ## Application structure
@@ -314,6 +375,15 @@ The following widget types are provided with the Cloud Kit application:
     - "X-axis tick size" (`ticksize`): the spacing, in seconds, between ticks/lines
         drawn along the X-axis of the chart
 
+- __On/Off Display Widget__ (`on-off`): Displays the value of a digital input.
+    - "Invert Values" (`invert`): checkbox - if checked, "On" is
+      displayed for a zero value and "Off" for 1.
+
+- __On/Off Switch Widget__ (`switch`): presents a flip-switch widget
+    to toggle values on/off
+    - "Invert Values" (`invert`): checkbox - if checked, the switch moving to "On"
+        sends a 0 to the device, and "Off" sends a 1
+
 - __Progress Bar Widgets__ (`progress`/`progress-vertical`): represents data values
     in a progress-bar view. Widget settings allow you to set the low and high values
     for the bar. Vertical and horizontal versions of the widget exist.
@@ -332,13 +402,6 @@ The following widget types are provided with the Cloud Kit application:
     - "Low value" (`low`): low-end value for the slider
     - "High value" (`high`): high-end value for the slider
     - "Step Size" (`step`): slider step size (spacing between 'snaps') - default 1
-
-- __Switch Widget__ (`switch`): presents a flip-switch widget to toggle values on/off
-    - "Invert Values" (`invert`): checkbox - if checked, the switch moving to "On"
-        sends a 0 to the device, and "Off" sends a 1
-    - "Read-Only Switch" (`read_only`): checkbox - if checked, the switch will
-        only represent the data stream value last received from the server, i.e.
-        it will not be interactive
 
 - __Tilt Widget__ (`tilt`): Creates a two-dimensional display which represents
       the output of the acellerometer in the kit, similar to a two-dimensional
@@ -530,7 +593,7 @@ Secret, unique security keys and credentials for your app:
 - `AES_CRYPTO_KEY_HEX`: Random 16 Bytes, represented as string of 32 hex characters.
 Used for extra encrypting of various things. Randomly generated if not found.
 
-The following are used to customize the basic authentication crdentials used by
+The following are used to customize the basic authentication credentials used by
 Device Cloud when pushing monitor events to the server:
 
 - `DEVICE_CLOUD_MONITOR_AUTH_USER`: Username. Defaults to "change" if not found.
@@ -539,10 +602,15 @@ Device Cloud when pushing monitor events to the server:
 **The following are useful for debugging and local development, and may be
 changed at any time:**
 
-- `DJANGO_DEBUG`: Used to run Django in debug mode (see [documentation](https://docs.djangoproject.com/en/dev/ref/settings/#debug))
-- `DJANGO_LOCAL_DEV`: will make Django to use a local sqlite3 file instead of
-trying to connect to DATABASE_URL
+- `ON_HEROKU`: If set to true, Django will connect to DATABASE_URL and serve
+  the application over HTTPS; otherwise, Django will use a local sqlite3
+  database and use HTTP. (The Django settings file will detect the Heroku
+  environment and override this value to True when deployed to Heroku.
+  Otherwise, the value is set to False.)
 
+- `DJANGO_DEBUG`: Used to run Django in debug mode (see
+  [documentation](https://docs.djangoproject.com/en/dev/ref/settings/#debug)).
+  Defaults to the opposite of `ON_HEROKU`.
 
 ## Exploring the API
 
@@ -624,13 +692,12 @@ Local development is relatively simple to get started with. Users have a few
 options, see the file `Procfile` for some possibilities, users may wish to
 emulate the Heroku environment by running with Foreman
 
-      foreman run
+      foreman start
 
-Or in the simplest case, With dependencies installed via pip, simply run Django
- directly, setting the debug variables `DJANGO_DEBUG=True` and
-`DJANGO_LOCAL_DEV=True`
+Or in the simplest case, with dependencies installed via pip, simply run Django
+ directly:
 
-      python manage.py runserver_socketio "0.0.0.0:$PORT"
+      python manage.py runserver_socketio "0.0.0.0:5000"
 
 Note: users running the app for the first time will still need to provision the
 local database (defined in settings.py or via `DATABASE_URL` environment variable)
@@ -652,7 +719,9 @@ can be scheduled daily by adding the task `python manage.py clearsessions`
 
 - `New Relic`: Useful for monitoring performance characteristics and
 availablility of the application. NOTE: when running with New Relic agent, a
-different command is used in the Procfile
+different command is used in the Procfile. You will need to uncomment the second
+line (`web: newrelic-admin ...`) and comment out the third line
+(`web: gunicorn ...`)
 
 - `Papertrail`: Log management, archive, and search
 
@@ -661,7 +730,7 @@ different command is used in the Procfile
 License
 -------
 
-This software is open-source software.  Copyright Digi International, 2012.
+This software is open-source software.  Copyright Digi International, 2014.
 
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this file,

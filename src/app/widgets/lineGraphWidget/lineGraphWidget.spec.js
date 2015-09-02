@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -104,10 +104,9 @@ describe('Controller: lineGraphWidgetCtrl', function() {
 
     it('should maintain sorted order by timestamp', function () {
         var i;
-        // Originally set at 5000 - this causes testing delays, and IE8 doesn't
-        // like delays in scripts. Besides, the tests passed when the count was
-        // that high, so it seems a reasonable assumption that the code is
-        // working.
+        // Originally set at 5000 - this causes testing delays though.
+        // Besides, the tests passed when the count was that high, so it seems
+        // a reasonable assumption that the code is working.
         var MAX_COUNT = 250;
         for (i = 0; i < MAX_COUNT; i++) {
             // Note: second item in data point (value) doesn't matter

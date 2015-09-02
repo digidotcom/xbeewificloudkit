@@ -5,7 +5,7 @@
         </div>
         <div class="modal-body">
             <div class="alert alert-danger" ng-show="state.error">
-                Error adding device<span ng-show="state.error_text">: <strong>{{state.error_text}}</stong></span>
+                Error adding device<span ng-show="state.error_text">: <strong>{{state.error_text}}</strong></span>
             </div>
             <form name="form" role="form" novalidate>
                 <div class="form-group">
@@ -13,7 +13,7 @@
                         Device MAC Address
                         <a href="" tooltip="The device MAC address is 12 characters, usually printed on attached label" tooltip-placement="right">What's This?</a>
                     </label>
-                    <input id="mac" name="input_mac" type="text" class="form-control" ng-model="device_mac" required ui-mask="XX:XX:XX:XX:XX:XX">
+                    <input id="mac" name="input_mac" type="text" class="form-control" ng-model="device_mac" required capitalize-first ui-mask="00:40:9D XX:XX:XX">
                 </div>
                 <div class="form-group" ng-class="{'has-error':!form.input_desc.$valid}">
                     <label for="desc">Description (optional)</label>
@@ -24,7 +24,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-            <button class="btn btn-devicecloud" ng-click="add(device_mac, device_desc)" ng-disabled="form.$invalid || state.working"><span ng-show="state.working"><i class="icon-spinner icon-spin"></i> </span>Add Device</button>
+            <button class="btn btn-devicecloud" ng-click="add('00409D' + device_mac, device_desc)" ng-disabled="form.$invalid || state.working"><span ng-show="state.working"><i class="icon-spinner icon-spin"></i> </span>Add Device</button>
         </div>
     </div>
 </div>

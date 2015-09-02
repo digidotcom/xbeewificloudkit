@@ -6,6 +6,6 @@
         <p class="form-control-static" ng-if="is_disabled">{{selected_type.description}}</p>
         <select ng-show="!is_disabled" class="form-control" name="type"
             id="type" ng-model="selected_type"
-            ng-options="v.description for (k,v) in select_values"></select>
+            ng-options="v.description for (k,v) in select_values | orderBy:'+description'"></select>
     </div>
 </div>

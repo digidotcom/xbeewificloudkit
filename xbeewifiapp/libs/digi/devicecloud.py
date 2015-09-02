@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 """
@@ -519,7 +519,7 @@ class DeviceCloudConnector(object):
 
         return self.get_monitors(topics, [url])
 
-    def kick_monitor(self, monitor_id):
+    def kick_monitor(self, monitor_id, auth_user, auth_pass):
         """
         Monitors may go inactive after a number of failed pushes, or be in a
         backoff state. An empty PUT will make it active again or reset backoff.
@@ -527,6 +527,8 @@ class DeviceCloudConnector(object):
         put_dict = {
             'Monitor': {
                 'monId': monitor_id,
+                # Update the monitor with the most up-to-date auth information
+                'monTransportToken': ':'.join([auth_user, auth_pass]),
             },
         }
         put_body = xmltodict.unparse(put_dict)

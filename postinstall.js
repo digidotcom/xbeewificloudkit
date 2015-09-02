@@ -9,10 +9,8 @@ var is_windows = false;
 
 if (platform === "win32") {
     is_windows = true;
-    // It is assumed the user has already run "npm install -g bower" and
-    // "npm install -g grunt-cli"
-    bower_path = "bower";
-    grunt_path = "grunt";
+    bower_path = ".\\node_modules\\bower\\bin\\bower";
+    grunt_path = ".\\node_modules\\grunt-cli\\bin\\grunt";
 } else {
     // We reach this case if the user is not running Windows, i.e. they are
     // running Linux, or Mac OS, or something else. Windows seems to be the
@@ -30,19 +28,21 @@ function spawn_command(cmd, args) {
     // on Windows, and, if so, call spawn(cmd /c <cmd> <args>) instead.
     // http://stackoverflow.com/a/18334540
     if (is_windows) {
-        return spawn("cmd", ["/c", cmd].concat(args));
+        // Spawn cmd /c node <cmd>, because the commands we're running (grunt
+        // and bower) are actually Node scripts
+        return spawn("cmd", ["/c", "node", cmd].concat(args));
     } else {
         return spawn(cmd, args);
     }
 }
 
 console.log("Running bower install" + (is_windows ? " ON WINDOWS" : ""));
-bower_child = spawn_command(bower_path, ["install"]);
+bower_child = spawn_command(bower_path, ["install", "--no-color"]);
 bower_child.stdout.on("data", function (data) {
-    console.log("<stdout> " + data);
+    console._stdout.write(data.toString());
 });
 bower_child.stderr.on("data", function (data) {
-    console.log("<stderr> " + data);
+    console._stderr.write(data.toString());
 });
 bower_child.on("exit", function (code, signal) {
     if (code) {
@@ -54,10 +54,10 @@ bower_child.on("exit", function (code, signal) {
         console.log("Running grunt heroku:production" + (is_windows ? " ON WINDOWS" : ""));
         grunt_child = spawn_command(grunt_path, ["heroku:production"]);
         grunt_child.stdout.on("data", function (data) {
-            console.log("<stdout> " + data);
+            console._stdout.write(data.toString());
         });
         grunt_child.stderr.on("data", function (data) {
-            console.log("<stderr> " + data);
+            console._stderr.write(data.toString());
         });
         grunt_child.on("exit", function (code, signal) {
             if (code) {

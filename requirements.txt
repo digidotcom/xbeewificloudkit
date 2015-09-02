@@ -6,11 +6,13 @@ dj-static==0.0.5
 django-cors-headers==0.11
 django-jsonfield==0.9.10
 django-jux==1.0.2
+# Used for verbose logging
+django-log-request-id==1.0.0
 django-sslify==0.2
-djangorestframework==2.3.8
-gevent==0.13.8
--e git://github.com/abourget/gevent-socketio.git@aeece7038b0052ddf6b4228857e4d7a67a6242f2#egg=gevent_socketio-dev
-gevent-websocket==0.3.6
+djangorestframework==2.3.14
+gevent==1.0.2
+gevent-socketio==0.3.6
+gevent-websocket==0.9.5
 greenlet==0.4.1
 gunicorn==18.0
 mock==1.0.1

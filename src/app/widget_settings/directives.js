@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -37,6 +37,9 @@ angular.module('XBeeWiFiApp')
                     item.valid = true;
                 }
             });
+
+            // Make it easier to select widget type.
+            e.find('select').select2();
         },
         templateUrl: 'widget_settings/widget-type-settings-item.tpl.html',
         controller: "WidgetTypeController",
@@ -45,19 +48,47 @@ angular.module('XBeeWiFiApp')
         replace: true
     }
 })
-.directive('devicePickerSettingsItem', function () {
+.directive('devicePickerSettingsItem', function ($timeout, $log) {
     return {
         link: function (scope, e, a, controller) {
             var item = controller.new_settings_item({label: "Device"});
+            var select = e.find('select');
+            select.select2();
+
+            scope.$watch('devices', function () {
+                select.trigger('change.select2');
+            });
+
             item.message = "You need to select a device.";
             scope.$on('$destroy', function () {
                 controller.remove_settings_item(item);
             });
-            scope.$watch('selected_device', function (value) {
+            scope.$watch('selected_device', function (value, oldvalue) {
+                $log.debug("Device selection changed: ", oldvalue, value);
                 var error = _.isEmpty(value);
                 scope.has_error = error;
                 //scope.form.$setValidity("device", !error);
                 item.valid = !error;
+
+                $timeout(function () {
+                    // Sometimes, certain browsers end up selecting more than
+                    // one option here, which keeps select2 from working
+                    // properly. Fix that.
+                    var selected = select.find('option[selected]');
+                    var actual_idx = _.findIndex(scope.devices, {devConnectwareId:value});
+                    if (actual_idx === -1) {
+                        $log.debug("No device matches in here:", value, scope.devices);
+                        return;
+                    }
+
+                    selected.each(function (index) {
+                        if (parseInt(index, 10) !== actual_idx) {
+                            $(this).removeAttr("selected");
+                        }
+                    });
+
+                    select.select2();
+                }, 0);
             });
         },
         templateUrl: 'widget_settings/device-picker-settings-item.tpl.html',
@@ -68,36 +99,35 @@ angular.module('XBeeWiFiApp')
     }
 })
 .directive('settingsItem', function ($log, utils, $timeout) {
-    //jshint -W116
     var whenRendered = function (scope, elem) {
-        $log.debug(scope.opt.required, scope.widget[scope.opt.key], elem);
+        $log.debug("Rendered setting %s: %s %s",
+                   scope.opt.key, scope.widget[scope.opt.key],
+                   scope.opt.required ? "(required)" : "(not required)");
         if (!scope.opt.required) {
             $(elem).find("input.form-control").prop("placeholder", scope.opt['default']);
         }
 
         if (scope.opt.type === "number") {
             var input = elem.find("input");
-            if (scope.opt.minimum != null) {
+            if (scope.opt.minimum !== null && scope.opt.minimum !== undefined) {
                 input.attr("min", scope.opt.minimum);
             }
-            if (scope.opt.maximum != null) {
+            if (scope.opt.maximum !== null && scope.opt.maximum !== undefined) {
                 input.attr("max", scope.opt.maximum);
             }
         }
     };
 
-    //jshint -W116
     var isEmpty = function (value) {
-        return (value == null) || (value === "");
+        return (value === null) || (value === undefined) || (value === "");
     }
 
-    //jshint -W116
     var okayToBeEmpty = function (value, scope) {
         if (scope.opt.required) {
             return false;
         }
         var _default = scope.opt['default'];
-        if (_.isNumber(_default) || _default != null) {
+        if (_.isNumber(_default) || _default !== null || _default !== undefined) {
             // Yes, this setting specifies a default value.
             return true;
         }
@@ -222,8 +252,8 @@ angular.module('XBeeWiFiApp')
                 prop['enum'] = _.pluck(scope.select_values, 'value');
             }
 
-            scope.$watch('widget[opt.key]', function (value) {
-                $log.debug("Value changed!", value);
+            scope.$watch('widget[opt.key]', function (value, oldvalue) {
+                $log.debug("Setting %s changed (from, to): %s, %s", scope.opt.key, oldvalue, value);
                 if (isEmpty(value) && okayToBeEmpty(value, scope)) {
                     // Just let the default shine through.
                     scope.form.$setValidity(scope.opt.key, true);

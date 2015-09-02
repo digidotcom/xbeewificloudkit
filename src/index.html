@@ -1,7 +1,5 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if lte IE 8]> <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
@@ -15,10 +13,6 @@
 
         <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
         <link rel="stylesheet" type="text/css" href="/static/<%= file %>" /><% }); %>
-
-        <!--[if IE 7>
-        <link rel="stylesheet" href="/static/assets/font-awesome-ie7.min.css />
-        <![endif]-->
   </head>
   <body ng-app="XBeeWiFiApp" id="ng-app"
   ng-class="{'login-page': $state.is('login') || $state.is('login_other')}">
@@ -35,13 +29,32 @@
             </div>
         </div>
     </div>
-    <!--[if lt IE 9]>
-        <% shims.forEach( function ( file ) { %>
-        <script src="/static/<%= file %>"></script><% }); %>
+    <!--[if lte IE 8]>
+    <div class="container" style="margin-top: 1em">
+        <div id="old-browser-warning" class="alert alert-danger">
+            You are using an <strong>outdated</strong> browser.
+            Please <a href="http://browsehappy.com/" target="_blank">upgrade your browser or
+            install a new one</a> to use this application.
+        </div>
+        <div id="compatmode-warning" class="alert alert-warning hide">
+            You are using Compatibility Mode. Switch to non-Compatibility Mode to
+            use this application.
+        </div>
+    </div>
+    <script type="text/javascript">
+    var compatmode = document.getElementById("compatmode-warning");
+    var oldbrowser = document.getElementById("old-browser-warning");
+    if (typeof document.documentElement.style.opacity !== 'undefined') {
+        // IE9+ Compatibility Mode is on.
+        compatmode.className = compatmode.className.replace(" hide", "");
+        oldbrowser.className += " hide";
+    }
+    </script>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
+    <![if gt IE 8]>
     <div class="container" ng-class="{'container-full': $state.is('dashboard')}" ui-view="page"></div>
+    <![endif]>
 
     <div id="footer_separator">
         <div class="container">
@@ -52,8 +65,9 @@
 
 <%= footer %>
 
-    <!-- compiled CSS --><% scripts.forEach( function ( file ) { %>
+    <!--[if gt IE 8]>
+    <!-- compiled JS --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="/static/<%= file %>"></script><% }); %>
-
+    <![endif]-->
 </body>
 </html>

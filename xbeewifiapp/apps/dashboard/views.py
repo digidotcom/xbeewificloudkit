@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 import logging
@@ -207,7 +207,10 @@ def monitor_setup(request, device_id):
             logger.info(
                 'Found an existing DataPoint monitor for %s, kicking it'
                 % device_id)
-            conn.kick_monitor(monitor['monId'])
+            conn.kick_monitor(
+                monitor['monId'],
+                settings.SECRET_DEVICE_CLOUD_MONITOR_AUTH_USER,
+                settings.SECRET_DEVICE_CLOUD_MONITOR_AUTH_PASS)
             # Return the original info
             resp = monitors
 
@@ -270,7 +273,10 @@ def monitor_devicecore_setup(request):
             monitor = monitors['items'][0]
             logger.info(
                 'Found an existing DeviceCore monitor for user, kicking it')
-            conn.kick_monitor(monitor['monId'])
+            conn.kick_monitor(
+                monitor['monId'],
+                settings.SECRET_DEVICE_CLOUD_MONITOR_AUTH_USER,
+                settings.SECRET_DEVICE_CLOUD_MONITOR_AUTH_PASS)
             # Return the original info
             resp = monitors
 
@@ -360,8 +366,13 @@ def login_user(request):
     usercloudid = username + \
         settings.LIB_DIGI_DEVICECLOUD['USERNAME_CLOUD_DELIMETER'] + cloud_fqdn
     if username and password and cloud_fqdn:
-        user = authenticate(username=usercloudid,
-                            password=password)
+        try:
+            user = authenticate(username=usercloudid,
+                                password=password)
+        except Exception:
+            logger.exception("Uncaught exception during authentication")
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         if user is not None:
             login(request, user)
 

@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 import os
@@ -15,12 +15,14 @@ import sys
 # Detect if we're in unit test mode
 TESTING = 'test' in sys.argv
 
+# Detect if we're running on Heroku
+ON_HEROKU = 'DYNO' in os.environ and os.environ.get('HOME', "").startswith("/app")
+
 # Django settings for xbeewifiapp project.
 
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
+# By default, turn DEBUG off when running on Heroku
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', (not ON_HEROKU)))
 TEMPLATE_DEBUG = DEBUG
-
-LOCAL_DEV = bool(os.environ.get('DJANGO_LOCAL_DEV', False))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -29,7 +31,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {}
-if LOCAL_DEV:
+if not ON_HEROKU:
     DATABASES['default'] = {
         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.sqlite3',
@@ -47,6 +49,13 @@ if LOCAL_DEV:
 else:
     # Parse database configuration from $DATABASE_URL
     DATABASES['default'] = dj_database_url.config()
+
+    # Since the database is mostly reads (writes only performed for updating
+    # dashboards, session data and user info), setting autocommit will keep the
+    # overhead down.
+    DATABASES['default']['OPTIONS'] = {
+        'autocommit': True
+    }
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -118,7 +127,6 @@ frontend_files_path_dev = os.path.join(
 if os.path.exists(frontend_files_path_dev):
     STATICFILES_DIRS = STATICFILES_DIRS + (frontend_files_path_dev, )
 
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -135,6 +143,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,8 +156,8 @@ MIDDLEWARE_CLASSES = (
     'xbeewifiapp.apps.dashboard.middleware.NoCacheApiMiddleware'
 )
 
-# If we're not in unit test mode, force SSL. Needs to be first.
-if not TESTING:
+# If we're on Heroku (or not in unit test mode), force SSL. Needs to be first.
+if ON_HEROKU or not TESTING:
     force_ssl = ('sslify.middleware.SSLifyMiddleware',)
     MIDDLEWARE_CLASSES = force_ssl + MIDDLEWARE_CLASSES
 
@@ -193,10 +202,16 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s: %(message)s'
         },
+        'verbose': {
+            'format': '%(levelname)s [thread: %(thread)d, %(module)s:%(funcName)s, request: %(request_id)s]: %(message)s'
+        }
     },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'request_id': {
+            '()': 'log_request_id.filters.RequestIDFilter'
         }
     },
     'handlers': {
@@ -209,6 +224,9 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
+            # DEBUG: Turn on verbose logging
+            #'filters': ['request_id'],
+            #'formatter': 'verbose'
         },
         'null': {
             'level': 'DEBUG',
@@ -231,6 +249,14 @@ LOGGING = {
 # Disable output for unit test mode
 if TESTING:
     LOGGING['loggers']['xbeewifiapp']['handlers'] = ['null']
+
+VERBOSE_LOGGING = bool(os.environ.get('VERBOSE_LOGGING', False))
+if VERBOSE_LOGGING:
+    # DEBUG: Log all requests
+    LOG_REQUESTS=True
+
+    LOGGING['handlers']['console']['formatter'] = 'verbose'
+    LOGGING['handlers']['console']['filters'] = ['request_id']
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -300,7 +326,8 @@ SECRET_DEVICE_CLOUD_MONITOR_AUTH_PASS = \
 
 # Supported Device Types (dpDeviceType) visible to frontend.
 # Will be used to filter Device Cloud queries
-SUPPORTED_DEVICE_TYPES = ['XBee WiFi S6B TH', ]
+SUPPORTED_DEVICE_TYPES = [
+    'XBee WiFi S6B TH', 'XBee WiFi S6B SMT']
 
 # Django Secret Key
 try:

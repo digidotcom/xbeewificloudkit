@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -101,8 +101,6 @@ angular.module('XBeeWiFiApp')
             sends_output: true,
             options: [
                 {key: "invert", label: "Invert Values", type: "boolean",
-                 required: false, "default": false},
-                {key: "read_only", label: "Read-Only Switch", type: "boolean",
                  required: false, "default": false}
             ]
         };

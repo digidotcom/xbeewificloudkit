@@ -12,7 +12,7 @@ angular.module('XBeeWiFiApp')
             // See http://lodash.com/docs#bind
             // (dataUpdate simply calls scope.updateHandler)
             var dataUpdate = _.bind(scope.updateHandler, scope);
-            utils.linkWidget(type, scope, element, spec, dataUpdate);
+            utils.postlinkWidget(type, scope, element, spec, dataUpdate);
             // Any more fancy footwork can be done here.
 
             // Watch scope values for changes, to trigger widget updates.
@@ -28,7 +28,7 @@ angular.module('XBeeWiFiApp')
             restrict: 'AE',
             link: linker,
             controller: 'simpleDataHolder',
-            scope: { widget: "=<%= directive %>" }
+            scope: { widget: "=<%= directive %>", state: "=" }
         };
     })
     // This function, referred to in AngularJS as a "run block", is called by

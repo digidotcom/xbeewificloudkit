@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -20,6 +20,15 @@ angular.module('XBeeWiFiApp')
 
         var fetched = false;
         var dashboard_dfd = $q.defer();
+
+        var _make_unique = function (widget_list) {
+            for (var i = 0; i < widget_list.length; i++) {
+                var widget = widget_list[i];
+
+                // Index guaranteed to be unique.
+                widget._uniq = i;
+            }
+        }
 
         //update dashboard with a PUT to <url_dfd>
 
@@ -49,6 +58,7 @@ angular.module('XBeeWiFiApp')
                         dfd.reject(["No dashboards in your account.", dashboard]);
                         return;
                     }
+                    _make_unique(dashboard.widgets);
                     // Otherwise, the dashboard should be okay, so resolve the
                     // promise with the list of widgets.
                     dfd.resolve(dashboard.widgets);
@@ -79,8 +89,15 @@ angular.module('XBeeWiFiApp')
             dashboard_dfd.promise.then(function (dashboard) {
                 var url = dashboard.url;
                 var resource = _.last(url.split(/com|org|net/));
-                $log.debug(dashboard.widgets);
-                cloudKitApi.update_widgets(resource, dashboard.widgets)
+                var widgets = [];
+                for (var i = 0; i < dashboard.widgets.length; i++) {
+                    // Remove _uniq key from each widget.
+                    var w = _.clone(dashboard.widgets[i]);
+                    delete w._uniq;
+                    widgets.push(w);
+                }
+                $log.debug(widgets);
+                cloudKitApi.update_widgets(resource, widgets)
                     .then(function() {
                         $log.debug("update_widgets succeeded", arguments);
                         dfd.resolve();
@@ -147,7 +164,6 @@ angular.module('XBeeWiFiApp')
                         gets: "ADC/1"
                     },
                     {
-                        read_only: false,
                         type: "switch",
                         invert: true,
                         sets: "DIO/7",
@@ -185,7 +201,6 @@ angular.module('XBeeWiFiApp')
                         label: "LED Gauge"
                     },
                     {
-                        read_only: false,
                         type: "switch",
                         invert: false,
                         sets: "DIO/9",
@@ -197,8 +212,7 @@ angular.module('XBeeWiFiApp')
                         label: "User LED"
                     },
                     {
-                        read_only: true,
-                        type: "switch",
+                        type: "on-off",
                         invert: true,
                         sets: "DIO/8",
                         _gridPos: {
@@ -221,7 +235,6 @@ angular.module('XBeeWiFiApp')
                         gets: "serial/0"
                     },
                     {
-                        read_only: false,
                         type: "switch",
                         invert: true,
                         sets: "DIO/6",
@@ -233,8 +246,7 @@ angular.module('XBeeWiFiApp')
                         label: "Motor Toggle"
                     },
                     {
-                        read_only: true,
-                        type: "switch",
+                        type: "on-off",
                         invert: true,
                         sets: "DIO/4",
                         _gridPos: {
@@ -253,14 +265,18 @@ angular.module('XBeeWiFiApp')
             }
         ];
 
-        var make_dashboard = function (device_id, widget_def) {
-            // set the 'device' field on each widget
-            var widgets = _.map(widget_def, function (w) {
-                // Clone each widget object so the originals are preserved.
-                var widget = _.clone(w);
-                widget.device = device_id;
-                return widget;
-            });
+        var make_dashboard = function (device_id, dashboard_def) {
+            var widgets = [];
+            // Only do anything with the device field if there are any widgets
+            // to begin with.
+            if (dashboard_def.length > 0) {
+                widgets = _.map(dashboard_def, function (w) {
+                    // Clone each widget object so the originals are preserved.
+                    var widget = _.clone(w);
+                    widget.device = device_id;
+                    return widget;
+                });
+            }
             return cloudKitApi.post_dashboard(widgets);
         }
 
@@ -274,6 +290,15 @@ angular.module('XBeeWiFiApp')
                 // Return a deep clone of available layouts,
                 // so that the original stock dashboard model here is preserved
                 return _.clone(dashboard_layouts, true);
+            },
+            current_url: function () {
+                var ret = $q.defer();
+                cloudKitApi.dashboard().then(function (dashboard) {
+                    ret.resolve(dashboard.url);
+                }, function () {
+                    ret.reject(arguments[0]);
+                });
+                return ret.promise;
             }
         };
     });

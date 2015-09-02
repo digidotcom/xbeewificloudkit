@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -21,7 +21,7 @@ angular.module('XBeeWiFiApp')
             return result;
         };
     })
-    .filter('sortByGridPosition', function ($log) {
+    .filter('sortByGridPosition', function () {
         var getRow = function (obj) {
             if (!_.has(obj, "_gridPos")) {
                 return obj.row;

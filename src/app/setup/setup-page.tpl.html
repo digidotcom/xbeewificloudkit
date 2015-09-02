@@ -3,22 +3,37 @@
 
 <p>Welcome to the XBee Wi-Fi Cloud Kit App! To get started, we need to set up your dashboard.</p>
 
-<div>
-    <h3>Step 1: Select a device</h3>
+<hr />
+
+<div class="dash_creation_block">
+    <h3>1: Choose a layout preset</h3>
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <select id="inputDashboard" class="form-control" ng-model="selected_layout" ng-options="l.description for l in dashboard_layouts">
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr ng-show="selected_layout.definition.length" />
+
+<div class="dash_creation_block" ng-show="selected_layout.definition.length">
+    <h3>2: Select your XBee Wi-Fi</h3>
     <div class="alert alert-danger" ng-show="load_error">
         {{load_error}}
     </div>
 
     <form class="form-horizontal" role="form">
         <div class="form-group">
-            <label for="inputDevice" class="col-lg-3 control-label">Device</label>
             <div class="col-lg-6">
-                <select id="inputDevice" class="form-control" ng-model="selected_device" ng-options="d.devMac for d in devices" ng-disabled="loading">
+                <select id="inputDevice" class="form-control" ng-model="selected_device" ng-options="make_label(d) for d in devices | orderBy:'+devConnectwareId'" ng-disabled="loading">
                 </select>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-6">
+            <div class="col-lg-6">
                 <button class="btn btn-devicecloud" ng-click="add_device()">
                     <i class="icon-plus"></i> Add New Device
                 </button>
@@ -31,59 +46,76 @@
         </div>
     </form>
 </div>
-<div ng-show="selected_device">
-    <h3>Step 2: Configure device for Cloud Kit</h3>
+
+<hr ng-show="selected_layout.definition.length && selected_device" />
+
+<div class="dash_creation_block" ng-show="selected_layout.definition.length && selected_device">
+    <h3>3: Configure for Cloud Kit</h3>
+
+    <!-- Fetching configuration -->
     <div class="row" ng-show="selected_device._config.checking">
-        <div class="alert alert-info col-lg-offset-2 col-lg-7">
+        <div class="alert alert-info col-lg-7">
             <i class="icon-spinner icon-spin icon-large"></i> Checking device configuration...
         </div>
     </div>
+
+    <!-- Applying configuration -->
     <div class="row" ng-show="selected_device._config.applying">
-        <div class="alert alert-info col-lg-offset-2 col-lg-7">
+        <div class="alert alert-info col-lg-7">
             <i class="icon-spinner icon-spin icon-large"></i> Applying Kit Configuration to device...
         </div>
     </div>
+
+    <!-- Not checking or applying... -->
     <div class="row" ng-show="!selected_device._config.checking && !selected_device._config.applying">
+        <!-- Either configured or not -->
         <div ng-show="!config.error">
-            <div ng-show="selected_device._config.stock" class="alert alert-success col-lg-offset-2 col-lg-7">
-                <i class="icon-ok icon-large"></i> This device is configured for the Cloud Kit
+            <div ng-show="selected_device._config.stock" class="alert alert-success col-lg-7">
+                <i class="icon-ok icon-large"></i> This device is configured for the Cloud Kit.
             </div>
+
             <div ng-show="!selected_device._config.stock">
-                <div class="alert alert-warning col-lg-offset-2 col-lg-7">
-                    <i class="icon-warning-sign icon-large"></i> This device is <strong>not</strong> configured for the Cloud Kit components. Would you like to apply kit configuration?
+                <div class="alert alert-warning col-lg-7">
+                    <i class="icon-warning-sign icon-large"></i> This device is <strong>not</strong> configured for the Cloud Kit. Would you like to apply the Kit Configuration?
                 </div>
-                <div class="col-lg-offset-3 col-lg-7">
-                    <button ng-click="configure_device(selected_device)" class="btn btn-devicecloud">Yes (recommended)</button>
-                    <button class="btn btn-default" ng-click="config.confirmed=true">No</button>
-                </div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-lg-7">
+                            <button ng-click="configure_device(selected_device)" class="btn btn-devicecloud">Yes (recommended)</button>
+                            <button class="btn btn-default" ng-click="config.confirmed=true">No</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="row" ng-show="config.error">
-            <div class="alert alert-danger col-lg-offset-2 col-lg-7">
-                An error occured processing configuration<span ng-show="config.error_text">: <strong>{{config.error_text}}</stong></span>
+
+        <!-- Error -->
+        <div ng-show="config.error">
+            <div class="alert alert-danger col-lg-7">
+                An error occurred processing configuration.<strong ng-show="config.error_text">&nbsp;Error: {{config.error_text}}</strong>
             </div>
-            <div class="col-lg-offset-3 col-lg-7">
-                <button class="btn btn-devicecloud" ng-click="checkConfig(selected_device)">Retry</button>
-                <button class="btn btn-default" ng-click="config.confirmed=true">Skip</button>
-            </div>
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="col-lg-7">
+                        <button class="btn btn-devicecloud" ng-click="checkConfig(selected_device)">Retry</button>
+                        <button class="btn btn-default" ng-click="config.confirmed=true">Skip</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<div ng-show="selected_device && config.confirmed">
-    <h3>Step 3: Choose a layout preset</h3>
-    <form class="form-horizontal" role="form">
-        <div class="form-group">
-            <label for="inputDevice" class="col-lg-3 control-label">Layout</label>
-            <div class="col-lg-6">
-                <select id="inputDashboard" class="form-control" ng-model="selected_layout" ng-options="l.description for l in dashboard_layouts">
-                </select>
-            </div>
+
+<form class="form-horizontal" role="form" ng-show="selected_layout.definition.length == 0 || (selected_device && config.confirmed)">
+    <hr />
+
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            <button class="btn btn-lg btn-devicecloud" ng-click="create_dashboard(selected_device, selected_layout)" ng-disabled="dashboard_working">
+                <span ng-show="dashboard_working">
+                    <i class="icon-spinner icon-spin icon-large"></i>
+                </span>&nbsp;Create Dashboard!
+            </button>
         </div>
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-6">
-                <button class="btn btn-lg btn-devicecloud" ng-click="create_dashboard(selected_device, selected_layout)" ng-disabled="dashboard_working"><span ng-show="dashboard_working"><i class="icon-spinner icon-spin icon-large"></i> </span>Create Dashboard!
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+    </div>
+</form>

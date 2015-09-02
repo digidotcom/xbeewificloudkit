@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 angular.module( 'XBeeWiFiApp', [
@@ -11,6 +11,7 @@ angular.module( 'XBeeWiFiApp', [
   'XBeeWiFiApp.devices',
   'XBeeWiFiApp.setup',
   'XBeeWiFiApp.api',
+  'XBeeWiFiApp.advanced',
   'templates-app',
   'templates-common',
   'ui.router',
@@ -155,6 +156,22 @@ angular.module( 'XBeeWiFiApp', [
                 controller: ""
             }
         }
+    })
+    .state('advanced', {
+        url: "/advanced",
+        views: {
+            navbar: {
+                templateUrl: "templates/navbar-logged-in.tpl.html",
+                controller: "NavbarController"
+            },
+            page: {
+                templateUrl: "advanced_options/page.tpl.html",
+                controller: "advancedOptionsCtrl"
+            },
+            footer_buttons: {
+                templateUrl: "templates/null-template.tpl.html"
+            }
+        }
     });
 
     $provide.factory('handle429', ['$q', '$log', '$injector', function ($q, $log, $injector) {
@@ -227,7 +244,7 @@ angular.module( 'XBeeWiFiApp', [
 .constant("RepoUrlBase", "https://github.com/digidotcom/xbeewificloudkit/blob/master")
 .value('uiMaskConfig', {
     'maskDefinitions': {
-        '9': /\d/,
+        '#': /\d/,
         'A': /[a-zA-Z]/,
         '*': /[a-zA-Z0-9]/,
         'X': /[a-fA-F0-9]/

@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -19,6 +19,7 @@ describe("Service: dashboardService", function() {
             {id: "widget2", type: "switch", label: "S1", options: {}}
         ]
     };
+    var cloned_widgets = _.cloneDeep(dashboard.widgets);
 
     var ready = function(backend) {
         backend.when('GET', '/api/dashboards').respond([dashboard]);
@@ -210,7 +211,7 @@ describe("Service: dashboardService", function() {
 
         expect(api.update_widgets).toHaveBeenCalledWith(
             _.last(dashboard.url.split(/com|org|net/)),
-            dashboard.widgets
+            cloned_widgets
         );
         deferred.resolve();
         // Trigger deferred callbacks within the api.update_widgets call
@@ -232,7 +233,7 @@ describe("Service: dashboardService", function() {
 
         expect(api.update_widgets).toHaveBeenCalledWith(
             _.last(dashboard.url.split(/com|org|net/)),
-            dashboard.widgets
+            cloned_widgets
         );
         deferred.reject();
         // Trigger deferred callbacks within the api.update_widgets call

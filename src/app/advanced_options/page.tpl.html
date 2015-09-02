@@ -1,0 +1,25 @@
+<h1>
+    Advanced Options
+</h1>
+
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Delete current dashboard</strong></div>
+    <div class="panel-body">
+        <p>
+            This will remove the current dashboard from your Cloud Kit account.
+            <span class="text-danger">This cannot be undone.</span>
+        </p>
+
+        <div class="alert alert-danger" ng-show="error" ng-bind="error"></div>
+
+        <center>
+            <button class="btn btn-devicecloud" id="deleteDash" ng-click="delete_it()" ng-disabled="getting_url || !current_dash || deleting_dash">
+                {{ current_dash ? 'Delete dashboard' : 'No dashboards in your account' }}
+                <i class="icon-spinner" ng-class="{'icon-spin': deleting_dash}"
+                    ng-show="deleting_dash"></i>
+            </button>
+        </center>
+    </div>
+</div>

@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -113,9 +113,69 @@ describe("Service: dataStreams", function() {
         expect(api.device_data).toHaveBeenCalledWith("my device");
     });
 
+    describe("should bring up a notification when an error is received", function () {
+        beforeEach(function () {
+            // No notifications initially.
+            expect(notifications.success).not.toHaveBeenCalled();
+            expect(notifications.error).not.toHaveBeenCalled();
+            expect(notifications.cancel).not.toHaveBeenCalled();
+        });
+
+        it("and handle empty messages correctly", function () {
+            var msg = "An error occurred";
+            socket_listeners.error(msg);
+            expect(notifications.error).toHaveBeenCalledWith(
+                undefined, msg, {timeOut: 10000});
+            notifications.error.reset();
+
+            socket_listeners.error(msg, "");
+            expect(notifications.error).toHaveBeenCalledWith(
+                undefined, msg, {timeOut: 10000});
+        });
+
+        it("and handle plain-text errors correctly", function () {
+            var msg = "An error occurred",
+                extra = "This is the error message.";
+            socket_listeners.error(msg, extra);
+            expect(notifications.error).toHaveBeenCalledWith(
+                extra, msg, {timeOut: 10000});
+        });
+
+        it("and parse basic RCI errors", function () {
+            var msg = "An error occurred",
+                extra = "<rci_reply><error>ABC</error></rci_reply>";
+
+            socket_listeners.error(msg, extra);
+            expect(notifications.error).toHaveBeenCalledWith(
+                "ABC", msg, {timeOut: 10000});
+        });
+
+        it("and parse RCI error non-greedily", function () {
+            // It should only extract the first error tag
+            var msg = "An error occurred",
+                extra = "<error>First error</error><error>Another error</error>";
+
+            socket_listeners.error(msg, extra);
+            expect(notifications.error).toHaveBeenCalledWith(
+                "First error", msg, {timeOut: 10000});
+            expect(notifications.error).not.toHaveBeenCalledWith(
+                "Another error", msg, {timeOut: 10000});
+        });
+
+        it("and trims web service crud from the error message", function () {
+            // "PUT Monitor error. Invalid request." should be removed. Same
+            // goes for "POST Monitor error. ..."
+            var msg = "An error occurred",
+                extra = "<error>PUT Monitor error. Invalid request. Foo.</error>";
+
+            socket_listeners.error(msg, extra);
+            expect(notifications.error).toHaveBeenCalledWith(
+                "Foo.", msg, {timeOut: 10000});
+        });
+    });
+
     it("(CODE COVERAGE CASE)", function () {
         socket_listeners.started_monitoring();
-        socket_listeners.error();
         socket_listeners.device_data({});
 
         streams.get_initial_data("device", "a");
@@ -124,7 +184,7 @@ describe("Service: dataStreams", function() {
         // executes get_initial_data cloudKitApi.device_data callback
 
         // Only have one of the streams...
-        device_data_deferreds["device"].resolve([
+        device_data_deferreds.device.resolve([
             {
                 streamId: "device/a",
                 currentValue: {

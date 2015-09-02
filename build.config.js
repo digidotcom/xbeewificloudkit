@@ -16,7 +16,7 @@ module.exports = {
   /**
    * app_version stores the 4-tuple version number for the application.
    */
-  app_version: '1.0.0.0',
+  app_version: '1.1.0.0',
 
   /**
    * The `build_dir` folder is where our projects are compiled during
@@ -36,7 +36,7 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/app/common/ie-fixes/*.js', 'src/**/*.js', '!src/**/*.spec.js',
+    js: [ 'src/common/ie-fixes/*.js', 'src/**/*.js', '!src/**/*.spec.js',
           '!src/app/no_log_debug.js' ],
     productionjs: [ 'src/app/no_log_debug.js' ],
     jsunit: [ 'src/**/*.spec.js' ],
@@ -68,8 +68,8 @@ module.exports = {
    */
   vendor_files: {
     js: [
-      'vendor/angular/angular.js',
       'vendor/jquery/jquery.js',
+      'vendor/angular/angular.js',
       'vendor/jquery-color/jquery.color.js',
       'vendor/bootstrap/js/dropdown.js',
       'vendor/bootstrap/js/tooltip.js',
@@ -80,18 +80,17 @@ module.exports = {
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/angular-ui-utils/modules/keypress/keypress.js',
       'vendor/angular-ui-utils/modules/mask/mask.js',
-      'vendor/lodash/dist/lodash.compat.js',
+      'vendor/lodash/dist/lodash.min.js',
       'vendor/Flot/jquery.flot.js',
       'vendor/Flot/jquery.flot.time.js',
-      'vendor/Flot/excanvas.min.js',
       'vendor/socket.io-client/dist/socket.io.js',
       'vendor/revalidator/lib/revalidator.js',
       'vendor/angular-cookies/angular-cookies.min.js',
       'vendor/restangular/dist/restangular.js',
-      'vendor/respond/respond.min.js',
       'vendor/raphael/raphael-min.js',
       'vendor/highlight.js/build/highlight.pack.js',
-      'vendor/justgauge/justgage.js',
+      'vendor/justgage/justgage.js',
+      'vendor/select2/select2.js',
       'vendor/toastr/toastr.js'
     ].concat(
       // Adding the jQuery UI files this way makes it easy to change the subset
@@ -99,11 +98,6 @@ module.exports = {
       jquery_ui_pieces(['core', 'widget', 'mouse', 'position', 'progressbar',
                        'slider', 'effect', 'effect-fade'], true)
     ),
-    shims: [
-        'vendor/es5-shim/es5-shim.min.js',
-        'vendor/es5-shim/es5-sham.min.js',
-        'vendor/json3/lib/json3.min.js'
-    ],
     css: [
         'vendor/jquery-ui/themes/start/jquery.ui.min.css',
         'vendor/jquery-ui/themes/base/jquery.ui.progressbar.css',
@@ -112,6 +106,10 @@ module.exports = {
         'vendor/jquery-ui/themes/start/images/*',
         'vendor/jquery-ui/themes/base/images/*',
         'vendor/highlight.js/src/styles/github.css',
+        'vendor/select2/select2.css',
+        'vendor/select2/select2.png',
+        'vendor/select2/select2-spinner.gif',
+        'vendor/select2-bootstrap-css/select2-bootstrap.css',
         'vendor/toastr/toastr.min.css'
     ]
   }

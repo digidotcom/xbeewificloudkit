@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 """
@@ -501,7 +501,7 @@ class DeviceCloudConnectorMonitorTest(DeviceCloudConnectorTestCase):
         self.assertIn('<monTopic>DataPoint/00000000-00000000-00000000-00000001</monTopic>' ,self.patched_post.call_args[1]['data'])
 
     def test_monitor_put(self):
-        self.cloud.kick_monitor('monitor_id')
+        self.cloud.kick_monitor('monitor_id', 'user', 'pass')
         self.assertTrue(self.patched_put.called)
-        xml = """<?xml version="1.0" encoding="utf-8"?>\n<Monitor><monId>monitor_id</monId></Monitor>"""
-        self.assertEqual(self.patched_put.call_args[1]['data'], xml)
+        self.assertIn('<monId>monitor_id</monId>', self.patched_put.call_args[1]['data'])
+        self.assertIn('<monTransportToken>user:pass</monTransportToken>', self.patched_put.call_args[1]['data'])

@@ -3,8 +3,10 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
+
+/*jshint bitwise: false*/
 
 'use strict';
 
@@ -90,7 +92,7 @@ angular.module('XBeeWiFiApp')
             }
 
             var bit = parseInt(parsed[2], 10) + ((parsed[1] === "P") ? 10 : 0);
-            var new_ic = parseInt(old_ic) | (1 << bit);
+            var new_ic = parseInt(old_ic, 16) | (1 << bit);
 
             return "0x" + new_ic.toString(16);
         }

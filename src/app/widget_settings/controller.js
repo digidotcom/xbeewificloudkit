@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2013 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 'use strict';
@@ -81,8 +81,8 @@ angular.module('XBeeWiFiApp')
     });
     $scope.defn = {};
 
-    $scope.$watch('form.$valid', function (validity) {
-        $log.debug("Validity changed! Now:", validity);
+    $scope.$watch('form.$valid', function (validity, pastvalidity) {
+        $log.debug("Validity changed! Now:", validity, "was: ", pastvalidity);
         $rootScope.$broadcast('widget_settings.valid', validity);
     });
 
@@ -218,16 +218,20 @@ angular.module('XBeeWiFiApp')
                                               $filter) {
     $scope.has_error = false;
     //$scope.selected_type = null;
-    var widget_types = $filter('nonHiddenWidgets')(widgetRegistry.getall());
-    // Sort widget types by their type key
-    $scope.select_values = _.sortBy(widget_types, function (v, key) { return key; });
+    $scope.select_values = $filter('nonHiddenWidgets')(widgetRegistry.getall());
 })
-.controller('DevicePickerController', function ($log, $scope, cloudKitApi) {
+.controller('DevicePickerController', function ($log, $scope, cloudKitApi, notificationService) {
     $scope.has_error = false;
+    $scope.loading_devices = true;
 
     $scope.devices = [];
     cloudKitApi.devices().then(function (devices) {
-        $scope.devices.splice.apply($scope.devices, [0, 0].concat(devices));
+        $scope.devices = devices;
+    }, function () {
+        $log.error("Error loading device list");
+        notificationService.error("Reload the page to try again.", "Error loading device list.");
+    })['finally'](function () {
+        $scope.loading_devices = false;
     });
 
     $scope.labelify = function (device) {
@@ -358,7 +362,7 @@ angular.module('XBeeWiFiApp')
         if (ic_value !== undefined && xbeeService.cmd_ic_capable(cmd_value)){
             var new_ic = xbeeService.generate_ic_str(cmd_name, ic_value);
             if(new_ic){
-                param["IC"] = new_ic;
+                param.IC = new_ic;
                 $log.debug("Including updated IC value:", param);
             }
         }

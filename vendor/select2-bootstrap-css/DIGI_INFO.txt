@@ -1,0 +1,3 @@
+This is a clone of the repository at
+https://github.com/t0m/select2-bootstrap-css
+branch bootstrap3, commit b6ce130a21

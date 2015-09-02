@@ -121,7 +121,7 @@ module.exports = function ( grunt ) {
       build_vendorjs: {
         files: [
           {
-            src: [ '<%= vendor_files.js %>', '<%= vendor_files.shims %>' ],
+            src: [ '<%= vendor_files.js %>' ],
             dest: '<%= build_dir %>/',
             cwd: '.',
             expand: true
@@ -177,16 +177,6 @@ module.exports = function ( grunt ) {
             dest: '<%= compile_dir %>/',
             cwd: '.',
             expand: true
-          }
-        ]
-      },
-      compile_shims: {
-        files: [
-          {
-              src: [ '<%= vendor_files.shims %>' ],
-              dest: '<%= compile_dir %>/',
-              cwd: '.',
-              expand: true
           }
         ]
       },
@@ -448,7 +438,6 @@ module.exports = function ( grunt ) {
       build: {
         dir: '<%= build_dir %>',
         src: [
-          '<%= build_dir %>/src/common/ie-fixes/*.js',
           '<%= vendor_files.js %>',
           '<%= build_dir %>/src/**/*.js',
           '<%= html2js.common.dest %>',
@@ -482,7 +471,6 @@ module.exports = function ( grunt ) {
         dir: '<%= build_dir %>/static',
         src: [
           '<%= vendor_files.js %>',
-          '<%= vendor_files.shims %>',
           '<%= html2js.app.dest %>',
           '<%= html2js.common.dest %>',
           'vendor/angular-mocks/angular-mocks.js'
@@ -650,9 +638,8 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'compile', [
     'recess:compile', 'copy:compile_assets', 'copy:compile_app_widget_files',
-    'copy:compile_user_widget_files', 'copy:compile_shims',
-    'copy:compile_vendorcss', 'copy:compile_productionjs', 'ngmin', 'concat',
-    'uglify', 'index:compile' ]);
+    'copy:compile_user_widget_files', 'copy:compile_vendorcss',
+    'copy:compile_productionjs', 'ngmin', 'concat', 'uglify', 'index:compile' ]);
   grunt.registerTask( 'ntc', ['nt', 'compile']);
 
   /**
@@ -704,7 +691,6 @@ module.exports = function ( grunt ) {
           data: {
             scripts: jsFiles,
             styles: cssFiles,
-            shims: grunt.config( 'vendor_files.shims' ),
             app_name: grunt.config( 'app_name' ),
             navbar_brand_text: grunt.config( 'navbar_text' ),
             footer: get_footer(),
