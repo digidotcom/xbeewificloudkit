@@ -25,7 +25,7 @@ angular.module('XBeeWiFiApp.login', [
         scope.username = "";
         scope.password = "";
         if ($state.is("login")) {
-            scope.cloud_fqdn = "login.etherios.com";
+            scope.cloud_fqdn = "devicecloud.digi.com";
             scope.is_us = true;
         } else if ($state.is("login_other")) {
             scope.cloud_fqdn = $stateParams.fqdn;

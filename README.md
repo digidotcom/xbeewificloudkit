@@ -563,10 +563,10 @@ code. However, advanced users may wish to extend the API with new functionality
 or do local debugging alongside frontend changes.
 
 The backend was designed to be relatively light-weight, largly wrapping existing
- [Device Cloud](http://www.etherios.com/products/devicecloud/) Web Services for
+ [Device Cloud](http://www.digi.com/cloud/digi-device-cloud) Web Services for
  use by the frontend. Users looking to extend or modify the API should first
  familizarize themselves with the Device Cloud features and API (documentation
- available [here](http://www.etherios.com/products/devicecloud/support/).
+ available [here](http://www.digi.com/products/cloud/digi-device-cloud#resources).
  Between these APIs and the frontend, the backend layer adds some simple
  persistence for dashboards, user authentication and session handling, and a
  channel for new data from Device Cloud to travel through down to the frontend

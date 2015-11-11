@@ -231,7 +231,7 @@ angular.module( 'XBeeWiFiApp', [
 })
 .controller('NavbarController', function ($scope, cloudKitApi) {
     $scope.username = "";
-    $scope.cloud_fqdn = "https://login.etherios.com";
+    $scope.cloud_fqdn = "https://devicecloud.digi.com";
     cloudKitApi.user().then(function (user) {
         if (user ===  null || user === undefined) {
             $scope.username = "<unknown>";
