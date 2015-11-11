@@ -335,7 +335,7 @@ def login_user(request):
     * `username` - device cloud username
     * `password` - device cloud password
     * `cloud_fqdn` - cloud server fully qualified domain name (ex
-                        _login.etherios.com_)
+                        _devicecloud.digi.com_)
 
     The following fields are optional:
 

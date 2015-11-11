@@ -32,7 +32,7 @@ describe("Controller: NavbarController", function () {
 
     it("should start with appropriate starting values", function () {
         expect(scope.username).toBe("");
-        expect(scope.cloud_fqdn).toBe("https://login.etherios.com");
+        expect(scope.cloud_fqdn).toBe("https://devicecloud.digi.com");
     });
 
     it("should call cloudKitApi.user on initialization", function () {
@@ -69,7 +69,7 @@ describe("Controller: NavbarController", function () {
 
         expect(scope.username).toBe("<unknown>");
         // cloud_fqdn is not updated in the then() callback
-        expect(scope.cloud_fqdn).toBe("https://login.etherios.com");
+        expect(scope.cloud_fqdn).toBe("https://devicecloud.digi.com");
     }));
 });
 

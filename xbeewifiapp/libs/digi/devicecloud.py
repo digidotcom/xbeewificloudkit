@@ -58,7 +58,7 @@ class DeviceCloudConnector(object):
             username (str): Device Cloud Account Username
             password (str): Device Cloud Account Password
             cloud_fqdn (str): Device Cloud Fully Qualified Domain Name (ex
-                                'login.etherios.com')
+                                'devicecloud.digi.com')
         """
         self.cloud_fqdn = cloud_fqdn
         # Requests session, defaults
