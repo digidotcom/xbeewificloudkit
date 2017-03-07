@@ -201,7 +201,7 @@ is already installed on the Vagrant virtual machine.)
 
 1.  Configure the new app to use multiple buildpacks (PGBouncer, NodeJS & python in our case):
 
-        $ heroku buildpacks:add https://github.com/gregburek/heroku-buildpack-pgbouncer.git#v0.3.1
+        $ heroku buildpacks:add hhttps://github.com/heroku/heroku-buildpack-pgbouncer.git
         $ heroku buildpacks:add heroku/nodejs
         $ heroku buildpacks:add heroku/python
 
