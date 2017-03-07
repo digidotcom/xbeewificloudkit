@@ -205,7 +205,7 @@ is already installed on the Vagrant virtual machine.)
 
 1.  Add the "Heroku Postgres" addon to your app:
 
-        $ heroku addons:add heroku-postgresql
+        $ heroku addons:create heroku-postgresql
 
 1.  Deploy the application code to Heroku:
 
