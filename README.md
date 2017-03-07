@@ -199,9 +199,11 @@ is already installed on the Vagrant virtual machine.)
 
         $ heroku create
 
-1.  Configure the new app to use multi-buildpacks (NodeJS & python in our case):
+1.  Configure the new app to use multiple buildpacks (PGBouncer, NodeJS & python in our case):
 
-        $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+        $ heroku buildpacks:add https://github.com/gregburek/heroku-buildpack-pgbouncer.git#v0.3.1
+        $ heroku buildpacks:add heroku/nodejs
+        $ heroku buildpacks:add heroku/python
 
 1.  Add the "Heroku Postgres" addon to your app:
 
