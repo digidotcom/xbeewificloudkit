@@ -85,7 +85,7 @@ describe("Controller: devicesPageCtrl", function () {
         expect(scope.devices).toEqual(jasmine.any(Object));
         expect(scope.config).toEqual({error: false, error_text: null});
         // Default Device Cloud URL is the US cloud
-        expect(scope.cloud_fqdn).toEqual("login.etherios.com");
+        expect(scope.cloud_fqdn).toEqual("devicecloud.digi.com");
     });
 
     it("should open a modal on add_device", function () {
@@ -148,7 +148,7 @@ describe("Controller: devicesPageCtrl", function () {
         user_deferred.reject({});
         scope.$digest();
 
-        expect(scope.cloud_fqdn).toBe("login.etherios.com");
+        expect(scope.cloud_fqdn).toBe("devicecloud.digi.com");
     });
 
     // configure_device tests

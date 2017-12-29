@@ -199,13 +199,15 @@ is already installed on the Vagrant virtual machine.)
 
         $ heroku create
 
-1.  Configure the new app to use multi-buildpacks (NodeJS & python in our case):
+1.  Configure the new app to use multiple buildpacks (PGBouncer, NodeJS & python in our case):
 
-        $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+        $ heroku buildpacks:add hhttps://github.com/heroku/heroku-buildpack-pgbouncer.git
+        $ heroku buildpacks:add heroku/nodejs
+        $ heroku buildpacks:add heroku/python
 
 1.  Add the "Heroku Postgres" addon to your app:
 
-        $ heroku addons:add heroku-postgresql
+        $ heroku addons:create heroku-postgresql
 
 1.  Deploy the application code to Heroku:
 
@@ -563,10 +565,10 @@ code. However, advanced users may wish to extend the API with new functionality
 or do local debugging alongside frontend changes.
 
 The backend was designed to be relatively light-weight, largly wrapping existing
- [Device Cloud](http://www.etherios.com/products/devicecloud/) Web Services for
+ [Device Cloud](http://www.digi.com/cloud/digi-device-cloud) Web Services for
  use by the frontend. Users looking to extend or modify the API should first
  familizarize themselves with the Device Cloud features and API (documentation
- available [here](http://www.etherios.com/products/devicecloud/support/).
+ available [here](http://www.digi.com/products/cloud/digi-device-cloud#resources).
  Between these APIs and the frontend, the backend layer adds some simple
  persistence for dashboards, user authentication and session handling, and a
  channel for new data from Device Cloud to travel through down to the frontend
